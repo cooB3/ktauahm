@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مركز خطوة المستقبل - النظام الموحد</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--p:#0284c7;--bg:#f4f8fa;--t:#0f172a;--g:#64748b;--c:#fff;--l:#e2e8f0}
+@media(prefers-color-scheme:dark){:root{--bg:#0f172a;--t:#f1f5f9;--g:#94a3b8;--c:#1e293b;--l:#334155}}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,'Segoe UI',sans-serif}
+body{background:var(--bg);color:var(--t);font-size:14px}
+.hidden{display:none!important}
+.card{background:var(--c);border:1px solid var(--l);border-radius:14px;padding:18px;margin-bottom:14px}
+h2,h3{color:var(--p);margin-bottom:12px}
+label{display:block;font-weight:700;font-size:12px;margin-bottom:10px}
+input,select,textarea{width:100%;margin-top:4px;padding:10px;border:1.5px solid var(--l);border-radius:9px;background:var(--bg);color:var(--t)}
+.b{background:var(--p);color:#fff;border:0;border-radius:9px;padding:9px 14px;font-weight:700;cursor:pointer;margin:2px}
+.b.r{background:#e11d48}.b.gr{background:#16a34a}.b.o{background:var(--c);color:var(--t);border:1px solid var(--l)}.b:disabled{opacity:.4;cursor:not-allowed}
+#side{position:fixed;top:0;right:0;width:250px;height:100vh;background:var(--c);border-left:1px solid var(--l);padding:14px;overflow:auto;z-index:50;transition:transform .25s;transform:translateX(100%)}
+#side.open{transform:none}
+#side .nav{display:flex;gap:10px;align-items:center;width:100%;text-align:right;background:none;border:0;color:var(--g);padding:10px;border-radius:9px;font-weight:700;cursor:pointer;margin-bottom:3px}
+#side .nav.on,#side .nav:hover{background:var(--bg);color:var(--p)}
+#main{padding:16px}
+#bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+@media(min-width:900px){#side{transform:none}#app{margin-right:250px}#mb{display:none}}
+.ov{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px;text-align:right;border-bottom:1px solid var(--l);white-space:nowrap}th{color:var(--g)}
+.mu{text-align:center;color:var(--g)}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kp h2{margin:4px 0 0;color:var(--t)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
+.tg{padding:3px 9px;border-radius:7px;font-size:12px;font-weight:700;background:var(--bg)}
+dialog{max-height:90vh;overflow:auto;margin:auto;border:0;border-radius:14px;padding:18px;width:min(92vw,460px);background:var(--c);color:var(--t)}
+dialog::backdrop{background:#0008}
+dialog.w{width:min(94vw,720px)}
+h4{color:var(--g);margin:12px 0 4px;font-size:13px}
+#toasts{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9999;display:grid;gap:8px;width:90%;max-width:380px}
+.toast{padding:12px;border-radius:10px;background:var(--c);border-right:5px solid;font-weight:700;box-shadow:0 4px 14px #0003}
+.toast.ok{border-color:#16a34a}.toast.er{border-color:#e11d48}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#side{height:100dvh}
+#bar{display:flex;gap:10px;align-items:stretch;margin-bottom:14px;flex-wrap:wrap}
+#hero{flex:1;min-width:230px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,#0284c7,#0d9488);color:#fff;border-radius:16px;padding:14px 18px;box-shadow:0 6px 18px #0284c733}
+#hero h2{color:#fff;margin:2px 0;font-size:clamp(16px,2.6vw,22px)}
+#hero small{opacity:.9}
+#hc{text-align:left}#hc b{font-size:clamp(18px,3vw,26px);display:block;direction:ltr}
+.pwr{position:relative;display:block}.pwr input{padding-inline-end:42px}
+.eye{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-35%);background:none;border:0;color:var(--g);cursor:pointer;font-size:16px}
+#shade{display:none;position:fixed;inset:0;background:#0006;z-index:40}
+@media(max-width:899px){#side.open+#shade{display:block}}
+@media(max-width:600px){#main{padding:10px}.card{padding:12px}.g2{grid-template-columns:1fr}.kp{grid-template-columns:1fr 1fr}th,td{padding:7px;font-size:12px}#hc{text-align:right}}
+
+#login{position:fixed;inset:0;overflow:auto;display:flex;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(160deg,#0c4a6e 0%,#0369a1 48%,#0e7490 100%)}
+#login::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cpath d='M29 22h6v7h7v6h-7v7h-6v-7h-7v-6h7z' fill='%23fff'/%3E%3C/svg%3E")}
+.xb{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1.5px solid #16a34a66;background:#16a34a12;border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.xi{width:42px;height:42px;border-radius:12px;background:#16a34a;color:#fff;display:grid;place-items:center;font-size:20px;flex:none}
+.xt{flex:1 1 220px;min-width:0}.xt b{display:block;margin-bottom:2px}.xt small{color:var(--g);line-height:1.7;display:block}
+.xa{display:flex;gap:6px;flex-wrap:wrap}
+.cp{text-align:center;color:var(--g);font-size:12px;line-height:1.9;padding:18px 10px 26px;margin-top:22px;border-top:1px solid var(--l)}
+.lg{position:relative;width:100%;max-width:410px;margin:auto;background:var(--c);border-radius:24px;overflow:hidden;box-shadow:0 24px 60px #0006}
+.lgh{position:relative;text-align:center;color:#fff;padding:30px 20px 74px;background:linear-gradient(135deg,#0369a1,#0891b2)}
+.lgh .ecg{position:absolute;inset:auto 0 30px 0;width:100%;height:30px;opacity:.28}
+.lgh .wv{position:absolute;left:0;bottom:-1px;width:100%;height:30px}
+.lo{position:relative;width:68px;height:68px;margin:0 auto 12px;border-radius:20px;background:#ffffff26;display:grid;place-items:center;font-size:30px}
+.lgh h1{position:relative;font-size:22px;margin-bottom:4px}.lgh p{position:relative;font-size:13px;opacity:.92}
+.lgb{padding:18px 22px 10px}
+.sa{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--l);border-radius:16px;padding:12px;margin-bottom:16px}
+.sa .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#0369a1,#0891b2);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.sa .tx{flex:1;min-width:0}.sa b{display:block;font-size:15px}.sa small{color:var(--g);word-break:break-all}
+.chip{display:inline-block;background:#0284c71f;color:var(--p);border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700;margin-top:4px}
+.lk{background:none;border:0;color:var(--p);font-weight:700;font-size:13px;cursor:pointer;padding:4px}
+.fl{display:block;font-weight:700;font-size:13px;margin-bottom:14px}
+.fi{position:relative;display:block;margin-top:6px}
+.fi .ic{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:var(--g);pointer-events:none}
+.fi input{margin:0;padding:13px 42px;border-radius:12px;font-size:15px}
+.fi input:focus{outline:0;border-color:var(--p);box-shadow:0 0 0 3px #0284c733}
+.fi .eye{inset-inline-end:10px;transform:translateY(-50%)}
+.lr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:-2px 0 14px}
+.ck{display:flex;align-items:center;gap:7px;margin:0;font-weight:500;font-size:13px;color:var(--g)}.ck input{width:auto;margin:0}
+#lerr:empty{display:none}
+#lerr{background:#e11d4814;color:#e11d48;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;margin-bottom:12px;word-break:break-all}
+.lb{width:100%;padding:14px;border-radius:14px;border:0;background:linear-gradient(135deg,#0369a1,#0891b2);color:#fff;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px #0369a155}.lb:disabled{opacity:.6;cursor:wait}
+.lf{margin-top:18px;padding:14px;text-align:center;background:var(--bg);color:var(--g);font-size:12px;border-top:1px solid var(--l);line-height:1.8}
+html[data-theme=light]{--bg:#f4f8fa;--t:#0f172a;--g:#64748b;--c:#fff;--l:#e2e8f0}
+html[data-theme=dark]{--bg:#0f172a;--t:#f1f5f9;--g:#94a3b8;--c:#1e293b;--l:#334155}
+#qtog{position:fixed;bottom:12px;left:12px;z-index:100000;display:flex;gap:6px}#qtog .b{padding:7px 11px;box-shadow:0 2px 8px #0002}
+html[dir=ltr] #qtog{left:auto;right:12px}html[dir=ltr] th,html[dir=ltr] td{text-align:left}html[dir=ltr] #hd{text-align:right}
+html[dir=ltr] #side{right:auto;left:0;border-left:0;border-right:1px solid var(--l);transform:translateX(-100%)}html[dir=ltr] #side.open{transform:none}
+@media(min-width:900px){html[dir=ltr] #side{transform:none}html[dir=ltr] #app{margin-right:0;margin-left:250px}}
+.idcard{width:204px;height:325px;margin:0 auto;border-radius:14px;overflow:hidden;background:#fff;color:#0f172a;box-shadow:0 8px 24px #0003;border:1px solid #bae6fd;text-align:center;font-size:9px;direction:rtl}
+.idh{background:linear-gradient(135deg,#0284c7,#0d9488);color:#fff;padding:10px 6px 30px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.idh img{height:30px;max-width:90px;object-fit:contain;background:#fff;border-radius:6px;padding:2px}.idh i{font-size:22px}.idh b{font-size:11px;line-height:1.3}.idh small{font-size:8px;opacity:.9}
+.idph{width:68px;height:68px;border-radius:50%;border:3px solid #fff;margin:-30px auto 4px;background:#e0f2fe;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#0284c7;font-size:28px;box-shadow:0 2px 8px #0003}.idph img{width:100%;height:100%;object-fit:cover}
+.idn{font-size:12px;font-weight:800;padding:0 6px}.idt{color:#0284c7;font-weight:700;margin-bottom:6px;min-height:12px}
+.idr{display:flex;justify-content:space-between;gap:4px;padding:3px 10px;border-top:1px solid #e2e8f0;text-align:right}.idr span{color:#64748b}.idr b{direction:ltr}
+#idc{position:fixed;inset:0;z-index:99998;background:#0009;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:16px;gap:10px}#idc .idcard{zoom:1.4;flex-shrink:0}
+@media(max-width:600px){#mini-n{display:none}}
+@media print{body>*:not(#idc){display:none!important}#idc{position:static!important;background:#fff!important;padding:0!important}#idc .idnp{display:none!important}#idc .idcard{zoom:1;box-shadow:none;margin:0}@page{size:54mm 86mm;margin:0}}
+.idcard{display:flex;flex-direction:column}.idf{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 8px;border-top:1px solid #e2e8f0;font-size:7px;color:#64748b;line-height:1.4}.idq svg{width:38px;height:38px;display:block}
+.idcard{position:relative;background:linear-gradient(180deg,#fff,#f0f9ff)}
+.idh{position:relative;padding:10px 6px 32px;background:radial-gradient(circle at 85% 12%,#ffffff45 0,transparent 42%),linear-gradient(135deg,#0284c7,#0d9488,#0284c7);background-size:100% 100%,220% 220%;animation:gshift 8s ease infinite}
+.idh small{display:flex;gap:4px;align-items:center;justify-content:center;letter-spacing:.4px}
+.idbeat{color:#fecdd3;animation:beat 1.3s ease-in-out infinite}
+.ecg{position:absolute;left:0;bottom:4px;width:100%;height:24px}.ecg path{fill:none;stroke:#fff;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.ecg0{opacity:.28}.ecg1{stroke-dasharray:55 145;animation:ecg 2.4s linear infinite}
+.idph{position:relative;z-index:2;animation:ring 2s ease-out infinite}
+.idcard::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#ffffff59,transparent);transform:skewX(-20deg);animation:shine 5.5s ease-in-out infinite;pointer-events:none}
+.idf{border-top:1px solid #e2e8f0;justify-content:flex-start;text-align:right;padding:4px 10px;gap:8px}.idf span{font-size:6.5px;line-height:1.5}
+.idv{padding:4px 6px;color:#fff;font-weight:800;font-size:8px;letter-spacing:.3px}.idv i{font-size:6px;vertical-align:middle;animation:blink 1.6s ease-in-out infinite}
+#idc .idcard{animation:rise .5s ease both}
+@keyframes gshift{0%,100%{background-position:0 0,0% 50%}50%{background-position:0 0,100% 50%}}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(1)}45%{transform:scale(1.2)}}
+@keyframes ecg{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+@keyframes ring{0%{box-shadow:0 0 0 0 #0d948880}100%{box-shadow:0 0 0 12px #0d948800}}
+@keyframes shine{0%,55%{left:-60%}100%{left:130%}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@media print{#idc .idcard,#idc .idcard *{animation:none!important}#idc .idcard::after{display:none}}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script></head><body>
+<div id="toasts"></div>
+<div id="login"><div class="lg">
+<div class="lgh"><svg class="ecg" viewBox="0 0 400 46" preserveAspectRatio="none"><path d="M0 24H110l12-18 16 38 14-24 10 4H400" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg><div class="lo"><i class="fa-solid fa-heart-pulse"></i></div><h1>مركز خطوة المستقبل</h1><p>النظام الموحد لعلاج وتأهيل الأطفال</p><svg class="wv" viewBox="0 0 400 30" preserveAspectRatio="none"><path d="M0 30V14C70 32 150 0 230 12s120 12 170 0V30z" style="fill:var(--c)"/></svg></div>
+<div class="lgb">
+<div id="gr" class="sa hidden"><div class="av" id="gra"></div><div class="tx"><b id="grt"></b><small id="grs"></small><br><span class="chip" id="grr"></span></div><button type="button" class="lk" data-a="swu">حساب آخر</button></div>
+<label id="emw" class="fl">اسم المستخدم أو البريد الإلكتروني<span class="fi"><i class="fa-regular fa-user ic"></i><input id="em" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" dir="ltr" placeholder="مثال: ahmad"></span></label>
+<label class="fl">كلمة المرور<span class="fi"><i class="fa-solid fa-lock ic"></i><input id="pw" type="password" autocomplete="current-password" dir="ltr"><button type="button" class="eye" data-a="eye" aria-label="إظهار كلمة المرور"><i class="fa-solid fa-eye"></i></button></span></label>
+<div class="lr"><label class="ck"><input id="rm" type="checkbox" checked> حفظ المستخدم على هذا الجهاز</label><button type="button" class="lk" data-a="forgot">نسيت كلمة المرور؟</button></div>
+<div id="lerr"></div>
+<button id="lbtn" class="lb" data-a="login"><span>تسجيل الدخول</span><i class="fa-solid fa-arrow-left"></i></button>
+</div>
+<div class="lf"><i class="fa-solid fa-shield-heart"></i> بيانات المرضى محمية، والدخول للمصرّح لهم فقط<br>© 2026 مركز خطوة المستقبل — جميع الحقوق محفوظة<br>الإصدار <span data-ver></span></div>
+</div></div>
+<div id="app" class="hidden">
+<aside id="side"><h3 id="who" style="margin-bottom:4px"></h3><small id="rl" style="color:var(--g)"></small><hr style="margin:10px 0;border-color:var(--l)"><nav id="nav"></nav>
+<button class="b o" style="width:100%;margin-bottom:8px" data-a="lock"><i class="fa-solid fa-lock"></i> قفل مؤقت</button><button class="b r" style="width:100%;margin-top:12px" data-a="logout">خروج</button></aside><div id="shade" data-a="menu"></div>
+<div id="main"><div id="bar"><button id="mb" class="b o" data-a="menu"><i class="fa-solid fa-bars"></i></button><div id="hero"><div><small>مركز خطوة المستقبل للعلاج الطبيعي</small><h2 id="ht">أهلاً بك</h2><span id="hn"></span></div><div id="hc"><b id="tm"></b><small id="dt2"></small></div></div><button class="b o" id="minid" data-a="idcard" title="بطاقتي" style="display:flex;align-items:center;gap:6px;padding:3px 8px"><span id="mini-ph" style="width:26px;height:26px;border-radius:50%;background:#e0f2fe;color:#0284c7;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:13px"><i class="fa-solid fa-id-card"></i></span><span id="mini-n" style="font-size:12px"></span></button><button class="b o" id="bell" data-a="bell" title="الإشعارات" style="position:relative"><i class="fa-solid fa-bell"></i><span id="bellc" style="display:none;position:absolute;top:-4px;left:-4px;min-width:16px;height:16px;border-radius:8px;background:#e11d48;color:#fff;font-size:10px;align-items:center;justify-content:center;padding:0 3px"></span></button><button class="b o" data-a="xl" title="تصدير الجدول إلى Excel"><i class="fa-solid fa-file-excel"></i></button></div><div id="scr"></div><footer class="cp">© 2026 مركز خطوة المستقبل — جميع الحقوق محفوظة<br>الإصدار <span data-ver></span></footer></div>
+</div>
+<dialog id="dlg"></dialog>
+<dialog id="cfm"></dialog>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import{getAuth,reauthenticateWithCredential,EmailAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import{getFirestore,collection,addDoc,deleteDoc,doc,updateDoc,setDoc,getDoc,onSnapshot,writeBatch,query,where,getDocs,orderBy,limit}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+const CFG={apiKey:"AIzaSyCnpbMGZCteZ9w_i5Rx0sKynle_qz0p2tk",authDomain:"mrkzalalgaltbay.firebaseapp.com",projectId:"mrkzalalgaltbay",storageBucket:"mrkzalalgaltbay.firebasestorage.app",messagingSenderId:"345480027808",appId:"1:345480027808:web:b8ca2b27761d3b912733c5"};const app=initializeApp(CFG);const sec=getAuth(initializeApp(CFG,'sec'));
+const auth=getAuth(app),db=getFirestore(app);
+
+/* ---------- أدوات ---------- */
+const $=id=>document.getElementById(id);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const V=s=>s||s===0?E(s):'—';
+const toast=(m,ok)=>{const d=document.createElement('div');d.className='toast '+(ok?'ok':'er');d.textContent=m;$('toasts').append(d);setTimeout(()=>d.remove(),3200)};
+const run=(p,m)=>p.then(()=>{m&&toast(m,1);m&&logAct(m,LC);return true}).catch(e=>{toast('فشل: '+(e.code||e.message),0);return false});
+const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'});
+const val=id=>($(id)?.value||'').trim();
+const uname=x=>x.includes('@')?x:x.toLowerCase()+'@khatwa.app';
+const lerr=m=>{const e=$('lerr');if(e)e.textContent=m||''};
+const T=(h,r,em='لا توجد بيانات')=>`<div class=ov><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(c=>`<tr>${c.map(x=>`<td>${x}</td>`).join('')}</tr>`).join(''):`<tr><td colspan=${h.length} class=mu>${em}</td></tr>`}</tbody></table></div>`;
+const B=(a,id,t,c='',x='')=>`<button class="b ${c}" data-a="${a}" data-id="${E(id)}" ${x}>${t}</button>`;
+const I=(id,l,t='text')=>`<label>${l}<input id="${id}" type="${t}"></label>`;
+const S=(id,l,o)=>`<label>${l}<select id="${id}">${o.map(x=>`<option value="${E(x[0])}">${E(x[1])}</option>`).join('')}</select></label>`;
+const O=a=>a.map(x=>[x,x]);
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const rnd=(n,ch)=>Array.from(crypto.getRandomValues(new Uint32Array(n)),x=>ch[x%ch.length]).join('');
+const ST={pending:'بانتظار الحضور',attended:'حاضر',completed:'مكتملة',no_show:'تخلّف'};
+const TIMES=O(Array.from({length:11},(_,i)=>String(i+8).padStart(2,'0')+':00'));
+
+/* ---------- الحالة ---------- */
+const D={children:[],appointments:[],staff:[],reports:[],attendance:[],invoices:[],specialties:[],branches:[],payroll:[],inventory:[],inquiries:[],packages:[],subscriptions:[],messages:[],activity_logs:[],moms_users:[],users:[],leaves:[],off_days:[],staff_cards:[]};
+const U={};let cur='home',unsubs=[],PERM=null,af='pending',child=null;
+const DEF={manager:['home','checkin','queue','newfile','appr','att','fin','children','staff','hr','acc','store','crm','specialties','branches','pkgs','subs','msgs','logs','archive','dataio','remind','kpi','backup'],accountant:['acc','fin','kpi','msgs','archive'],hr:['hr','staff','att','msgs','archive'],store:['store','msgs','archive'],service:['crm','msgs','archive'],doctor:['doctor','msgs','archive'],reception:['home','checkin','queue','booking','remind','subs','newfile','fin','children','msgs','archive']};
+let LC='',PCR=null,SELS=null,FIN={},REM=null;
+const VER='2.0.0',BUILD='2026-10-26',WIN={appointments:60,attendance:45,reports:365},FULLC=new Set(['appointments','attendance','reports']),since=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'})};
+document.querySelectorAll('[data-ver]').forEach(e=>{e.textContent=VER+' ('+BUILD+')'});
+const ls=(k,v)=>{try{return v===undefined?localStorage.getItem(k):localStorage.setItem(k,v)}catch{return null}};
+const fdt=x=>x?new Date(x).toLocaleString('ar-SA',{dateStyle:'short',timeStyle:'short'}):'—';
+const logAct=(a,d)=>U.uid&&U.role!=='it'?addDoc(collection(db,'activity_logs'),{byUid:U.uid,byName:U.name,byRole:U.role,action:a,details:d||'',screen:SC[cur]?.n||'',createdAt:new Date().toISOString()}).catch(()=>{}):0;
+const TT={manager:'المدير',doctor:'الطبيب',reception:'موظف الاستقبال',it:'مسؤول النظام',accountant:'المحاسب',hr:'مسؤول الموارد البشرية',store:'أمين المخزون',service:'موظف خدمة العملاء'};
+const PORTAL={manager:'بوابة المدير',doctor:'بوابة الأطباء',reception:'بوابة الاستقبال',it:'بوابة الـ IT',accountant:'بوابة المحاسبة',hr:'بوابة الموارد البشرية',store:'بوابة المخزون',service:'بوابة خدمة العملاء'};
+const ARC={
+ children:{n:'ملفات الأطفال المؤرشفة',f:x=>x.archived,c:[['الملف','fileNo'],['الاسم','name'],['التشخيص','diagnosis'],['أرشفها','archivedBy']],rs:1},
+ staff:{n:'الأخصائيون المؤرشفون',f:x=>x.archived,c:[['الرقم','empNo'],['الاسم','name'],['الاختصاص','title'],['أرشفه','archivedBy']],rs:1},
+ appointments:{n:'أرشيف المواعيد المنتهية',f:x=>x.status==='completed'||x.status==='no_show',c:[['الطفل','childName'],['الأخصائي','doctor'],['التاريخ','date'],['الحالة','status']]},
+ reports:{n:'أرشيف التقارير المعتمدة',f:x=>x.status==='approved',c:[['الطفل','childName'],['الأخصائي','doctor'],['التشخيص','diagnosis'],['التاريخ','date']]},
+ invoices:{n:'أرشيف السندات',f:()=>1,c:[['التاريخ','date'],['المراجع','client'],['المبلغ','amount'],['أصدره','by']]},
+ subscriptions:{n:'الاشتراكات المنتهية',f:x=>x.status==='done',c:[['الطفل','childName'],['الباقة','packageName'],['الجلسات','total'],['التاريخ','date']]},
+ attendance:{n:'أرشيف حضور الموظفين',f:()=>1,c:[['الموظف','staffName'],['التاريخ','date'],['دخول','in'],['خروج','out']]},
+ inquiries:{n:'أرشيف خدمة العملاء المغلق',f:x=>x.status==='closed',c:[['الاسم','name'],['الجوال','phone'],['التاريخ','date']]}
+};
+function showLogin(){let l=null;try{l=JSON.parse(ls('khatwa_last')||'null')}catch{}
+ $('gr').classList.toggle('hidden',!l);$('emw').classList.toggle('hidden',!!l);$('pw').value='';
+ if(l){$('grt').textContent=l.name||'';$('grs').textContent=l.email||'';$('grr').textContent=PORTAL[l.role]||TT[l.role]||'';$('gra').textContent=(l.name||'?').trim().charAt(0)}
+ $('lbtn').disabled=false;$('lbtn').firstElementChild.textContent='تسجيل الدخول';$('rm').checked=ls('khatwa_rm')!=='0';
+ return l}
+const RL={manager:'المدير',doctor:'طبيب',reception:'استقبال',it:'IT',accountant:'محاسب',hr:'موارد بشرية',store:'مخزون',service:'خدمة عملاء'};
+let mtab='in';
+const unread=()=>D.messages.filter(x=>x.toRole===U.role&&!x.read).length;
+const subOf=f=>D.subscriptions.find(x=>x.fileNo===f&&x.status==='active');
+const pkgTxt=f=>{const x=subOf(f);return x?`${E(x.packageName)}: ${x.used}/${x.total} (متبقي ${x.total-x.used})`:'بدون اشتراك فعّال'};
+const caseHtml=a=>`<div class=card style="padding:12px;font-size:13px"><b>${E(a.childName)}</b> — ملف ${V(a.fileNo)}<br>التشخيص: ${V(a.diagnosis)}<br>الحالة: ${V(a.cstatus)} | الجنس: ${V(a.gender)} | الميلاد: ${V(a.dob)}<br>التاريخ الطبي: ${V(a.history)}<br>الباقة: ${pkgTxt(a.fileNo)}</div>`;
+const SPEC=()=>D.specialties.length?D.specialties.map(x=>x.name):['جلسة علاج طبيعي','جلسة علاج وظيفي','جلسة تخاطب ونطق'];
+const BR=()=>D.branches.length?D.branches.map(x=>x.name):['الفرع الرئيسي'];
+const fillSel=(id,a)=>{const e=$(id);if(e&&e.options.length!==a.length){const v=e.value;e.innerHTML=a.map(x=>`<option value="${E(x)}">${E(x)}</option>`).join('');if(a.includes(v))e.value=v}};
+// XCORE START
+const LBL={name:'الاسم',fileNo:'رقم الملف',empNo:'الرقم الوظيفي',staffName:'اسم الموظف',staffId:'معرّف الموظف',childName:'اسم الطفل',client:'العميل',title:'الاختصاص / المسمى',spec:'الاختصاص',jobTitle:'المسمى الوظيفي',dept:'القسم',momName:'اسم ولي الأمر',momPhone:'جوال ولي الأمر',phone:'الجوال',branch:'الفرع',status:'الحالة',date:'التاريخ',time:'الوقت',idno:'رقم الهوية',gender:'الجنس',dob:'تاريخ الميلاد',diagnosis:'التشخيص',history:'التاريخ المرضي',parentUid:'معرّف حساب ولي الأمر',uid:'معرّف الحساب',username:'اسم المستخدم',role:'الدور',disabled:'موقوف',joinDate:'تاريخ التعيين',city:'المدينة',qty:'الكمية',min:'الحد الأدنى',unit:'الوحدة',sessions:'عدد الجلسات',price:'السعر',service:'الخدمة',amount:'المبلغ',method:'طريقة الدفع',note:'ملاحظة',notes:'ملاحظات',in:'وقت الدخول',out:'وقت الانصراف',action:'العملية',details:'التفاصيل',screen:'الشاشة',byName:'المنفذ',byRole:'دور المنفذ',byUid:'معرّف المنفذ',nat:'الجنسية',gen:'الجنس',ms:'الحالة الاجتماعية',email:'البريد',addr:'العنوان',emerg:'جهة الطوارئ',idType:'نوع الوثيقة',idExpiry:'انتهاء الهوية / الإقامة',pp:'رقم الجواز',ppExpiry:'انتهاء الجواز',contract:'نوع العقد',contractEnd:'انتهاء العقد',gosi:'رقم التأمينات',lic:'رقم الترخيص',licExpiry:'انتهاء الترخيص',qual:'المؤهل',salary:'الراتب الأساسي',housing:'بدل السكن',transport:'بدل المواصلات',other:'بدلات أخرى',bank:'البنك',iban:'الآيبان',archived:'مؤرشف',archivedBy:'أرشفه',archivedAt:'تاريخ الأرشفة',createdAt:'تاريخ الإنشاء',createdBy:'أنشأه',updatedAt:'تاريخ التعديل',by:'بواسطة',at:'وقت التعديل'};
+const REV=Object.fromEntries(Object.entries(LBL).map(([k,v])=>[v,k]));
+function xbuild(docs){
+ const bad=new Set(['photo']),seen=new Set(),first=[];
+ docs.forEach(d=>Object.entries(d).forEach(([k,v])=>{if(k==='id')return;if(typeof v==='string'&&v.startsWith('data:')&&v.length>30000)bad.add(k);if(!seen.has(k)){seen.add(k);first.push(k)}}));
+ let ks=first.filter(k=>!bad.has(k));
+ const P1=['name','fileNo','empNo','staffName','childName','client','title','dept','momName','phone','momPhone','branch','status','date'],P2=['createdAt','createdBy','by','archived','archivedBy','archivedAt','updatedAt','at'];
+ ks=['id',...P1.filter(k=>ks.includes(k)),...ks.filter(k=>!P1.includes(k)&&!P2.includes(k)),...P2.filter(k=>ks.includes(k))];
+ const types=ks.map(k=>{if(k==='id')return 's';for(const d of docs){const v=d[k];if(v===undefined||v===null||v==='')continue;return typeof v==='number'?'n':typeof v==='boolean'?'b':typeof v==='object'?'j':'s'}return 's'});
+ const cv=(v,t)=>{if(v===undefined||v===null)return '';if(t==='j')return typeof v==='string'?v:JSON.stringify(v);if(t==='n'||t==='b')return typeof v==='number'||typeof v==='boolean'?v:String(v);const x=typeof v==='object'?JSON.stringify(v):String(v);return x.length>32000?x.slice(0,32000):x};
+ const used=new Set(),head=ks.map(k=>{let h=k==='id'?'المعرّف (لا تغيّره)':(LBL[k]||k);if(used.has(h))h=h+' ('+k+')';used.add(h);return h});
+ return{aoa:[head,...docs.map(d=>ks.map((k,i)=>cv(k==='id'?d.id:d[k],types[i])))],keys:ks,types};
+}
+function xparse(aoa,keys,types){
+ const out=[],okKey=k=>/^[A-Za-z_][A-Za-z0-9_]{0,60}$/.test(k)&&!['__proto__','constructor','prototype'].includes(k);
+ aoa.slice(1).forEach((row,ri)=>{
+  if(!row||row.every(c=>c===''||c==null))return;
+  const data={};let id='',err='';
+  keys.forEach((k,j)=>{const v=row[j],t=types[j]||'s';
+   if(k==='id'){id=String(v??'').trim();return}
+   if(!okKey(k))return;
+   if(v===''||v==null){if(t==='s')data[k]='';return}
+   if(t==='n')data[k]=typeof v==='number'?v:(isFinite(+v)?+v:String(v));
+   else if(t==='b')data[k]=v===true||/^(true|1|yes|نعم)$/i.test(String(v));
+   else if(t==='j'){try{data[k]=JSON.parse(String(v))}catch(e){data[k]=String(v)}}
+   else data[k]=String(v)});
+  if(id&&(id.includes('/')||id==='.'||id==='..'))err='معرّف غير صالح';
+  out.push({row:ri+2,id,data,err})});
+ return out;
+}
+// XCORE END
+let _xl=null;const loadXL=()=>window.XLSX?Promise.resolve():(_xl||(_xl=new Promise((ok,no)=>{const urls=['https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js','https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'];let i=0;const t=()=>{if(window.XLSX)return ok();if(i>=urls.length){_xl=null;return no(new Error('xlsx'))}const sc=document.createElement('script');sc.src=urls[i++];sc.onload=t;sc.onerror=t;document.head.appendChild(sc)};t()})));
+const DS=[
+{k:'children',t:'سجلات الأطفال (ملفات المرضى)',d:'أسماء الأطفال وأرقام ملفاتهم وتشخيصاتهم وبيانات أولياء الأمور. تحفظها على جهازك كنسخة، ويمكن استيرادها لاسترجاع الملفات.',s:[['children','سجلات الأطفال']],imp:1},
+{k:'staff',t:'الموظفون والأخصائيون',d:'أسماء الموظفين وأقسامهم وبياناتهم الشخصية والوظيفية والرواتب. بيانات حساسة، احفظ الملف في مكان آمن. الصور والمرفقات لا تُصدَّر.',s:[['staff','الموظفون'],['payroll','بيانات وظيفية ورواتب']],imp:1},
+{k:'specialties',t:'الاختصاصات الطبية',d:'قائمة الاختصاصات المعتمدة في المركز.',s:[['specialties','الاختصاصات']],imp:1},
+{k:'branches',t:'الفروع',d:'أسماء الفروع ومدنها.',s:[['branches','الفروع']],imp:1},
+{k:'inventory',t:'المخزون',d:'الأصناف والكميات والحد الأدنى لكل صنف.',s:[['inventory','المخزون']],imp:1},
+{k:'packages',t:'الباقات والأسعار',d:'الباقات وعدد جلساتها وأسعارها.',s:[['packages','الباقات']],imp:1},
+{k:'subscriptions',t:'اشتراكات الباقات',d:'اشتراكات الأطفال في الباقات ورصيد الجلسات.',s:[['subscriptions','اشتراكات الباقات']],imp:1},
+{k:'invoices',t:'الفواتير والسندات',d:'سندات القبض: العميل والخدمة والمبلغ وطريقة الدفع.',s:[['invoices','الفواتير والسندات']],imp:1},
+{k:'attendance',t:'حضور وغياب الموظفين',d:'سجل الحضور والانصراف اليومي لجميع الموظفين.',s:[['attendance','حضور الموظفين']],imp:1},
+{k:'inquiries',t:'خدمة العملاء (الاستفسارات)',d:'قائمة الاستفسارات وحالتها.',s:[['inquiries','خدمة العملاء']],imp:1},
+{k:'reports',t:'التقارير الطبية',d:'تقارير الجلسات الطبية للأطفال وحالة اعتمادها.',s:[['reports','التقارير الطبية']],imp:1},
+{k:'activity_logs',t:'سجل العمليات',d:'آخر 500 عملية نفذها المستخدمون. للسجل فقط، ولا يُستورد.',s:[['activity_logs','سجل العمليات']]},
+{k:'moms_users',t:'حسابات أولياء الأمور',d:'أسماء الأولياء واسم المستخدم لكل حساب، بدون كلمات المرور. للسجل فقط، ولا يُستورد لأن الحسابات تُنشأ في Authentication.',s:[['moms_users','حسابات أولياء الأمور']]},
+{k:'users',t:'مستخدمو النظام',d:'أسماء الموظفين أصحاب حسابات الدخول وأدوارهم، بدون كلمات المرور. للسجل فقط، ولا يُستورد.',s:[['users','مستخدمو النظام']],f:{users:u=>u.role!=='parent'}}];
+const DSM=Object.fromEntries(DS.map(d=>[d.k,d])),IMPC=DS.filter(d=>d.imp).flatMap(d=>d.s.map(x=>x[0])),NK={children:'fileNo',staff:'empNo',specialties:'name',branches:'name',inventory:'name',packages:'name'};
+const SCDS={children:'children',staff:'staff',hr:'staff',specialties:'specialties',branches:'branches',store:'inventory',pkgs:'packages',subs:'subscriptions',fin:'invoices',att:'attendance',crm:'inquiries',appr:'reports',logs:'activity_logs',parents:'moms_users',susers:'users'};
+const xbox=(k,n)=>{const d=DSM[k],im=d.imp&&['manager','it'].includes(U.role);return`<div class=xb><div class=xi><i class="fa-solid fa-file-excel"></i></div><div class=xt><b>${E(d.t)}${n!=null?` <span class=tg>${n} سجل</span>`:''}</b><small>${E(d.d)}</small></div><div class=xa>${B('xexp',k,'تصدير Excel','gr')}${im?B('ximp',k,'استيراد','o'):''}</div></div>`};
+async function xdl(keys,fname){
+ try{await loadXL()}catch(e){return toast('تعذر تحميل مكتبة Excel، تأكد من الاتصال بالإنترنت',0)}
+ const wb=XLSX.utils.book_new(),meta=[['sheet','collection','keys','types','exportedAt','by']],now=new Date().toISOString();let total=0;
+ const SRC={};for(const k of keys)for(const[coll]of DSM[k].s)if(FULLC.has(coll)){try{SRC[coll]=(await getDocs(collection(db,coll))).docs.map(d=>({id:d.id,...d.data()}))}catch(e){}}
+ keys.forEach(k=>{const ds=DSM[k];ds.s.forEach(([coll,name])=>{const docs=(SRC[coll]||D[coll]||[]).filter(ds.f?.[coll]||(()=>true)),{aoa,keys:ks,types}=xbuild(docs),ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols']=ks.map((_,i)=>({wch:Math.min(40,Math.max(10,...aoa.slice(0,60).map(r=>String(r[i]??'').length)))}));ws['!autofilter']={ref:ws['!ref']};
+  ks.forEach((_,i)=>{const c=ws[XLSX.utils.encode_cell({r:0,c:i})];if(c)c.s={font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'0369A1'}},alignment:{horizontal:'center',vertical:'center',wrapText:true}}});
+  XLSX.utils.book_append_sheet(wb,ws,name.slice(0,31));meta.push([name.slice(0,31),coll,JSON.stringify(ks),JSON.stringify(types),now,U.name]);total+=docs.length})});
+ if(!total)return toast('لا توجد بيانات للتصدير',0);
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(meta),'_meta');
+ wb.Workbook={Views:[{RTL:true}],Sheets:wb.SheetNames.map(n=>({Hidden:n==='_meta'?1:0}))};
+ XLSX.writeFile(wb,fname+'-'+today()+'.xlsx');toast(`تم تصدير ${total} سجل`,1);logAct('تصدير Excel',fname+' ('+total+')')}
+let XIMP=null;
+// PRINT START
+const kid=c=>({rp:D.reports.filter(r=>r.fileNo===c.fileNo||(!r.fileNo&&r.childName===c.name)),ap:D.appointments.filter(a=>a.fileNo===c.fileNo),sb:D.subscriptions.filter(x=>x.fileNo===c.fileNo)}),srtR=(a,b)=>String(a.date||'').localeCompare(String(b.date||''))||String(a.createdAt||'').localeCompare(String(b.createdAt||''));
+async function kidFull(c){const [r,a]=await Promise.all([getDocs(query(collection(db,'reports'),where('fileNo','==',c.fileNo))),getDocs(query(collection(db,'appointments'),where('fileNo','==',c.fileNo)))]);
+ const rp=r.docs.map(d=>({id:d.id,...d.data()}));D.reports.filter(x=>!x.fileNo&&x.childName===c.name&&!rp.some(y=>y.id===x.id)).forEach(x=>rp.push(x));
+ return{rp,ap:a.docs.map(d=>({id:d.id,...d.data()})),sb:D.subscriptions.filter(x=>x.fileNo===c.fileNo)}}
+function cAge(dob){if(!dob)return'';const d=new Date(dob),n=new Date();if(isNaN(d))return'';let y=n.getFullYear()-d.getFullYear(),m=n.getMonth()-d.getMonth();if(n.getDate()<d.getDate())m--;if(m<0){y--;m+=12}return y>0?`${y} سنة${m?` و${m} شهر`:''}`:`${m} شهر`}
+function progSvg(pts){
+ if(pts.length<2)return'';const W=640,H=170,x0=36,x1=W-16,y0=22,y1=130,X=i=>x0+(x1-x0)*i/(pts.length-1),Y=p=>y1-(y1-y0)*p/100;
+ const grid=[0,25,50,75,100].map(g=>`<line x1="${x0}" x2="${x1}" y1="${Y(g)}" y2="${Y(g)}" stroke="#e2e8f0"/><text x="${x0-6}" y="${Y(g)+3}" font-size="9" fill="#64748b" text-anchor="end">${g}%</text>`).join('');
+ const line=pts.map((p,i)=>`${X(i)},${Y(p.p)}`).join(' '),show=pts.length<=12;
+ const dots=pts.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.p)}" r="3.5" fill="#0369a1"/>${show||i===0||i===pts.length-1?`<text x="${X(i)}" y="${Y(p.p)-8}" font-size="10" font-weight="700" fill="#0369a1" text-anchor="middle">${p.p}%</text><text x="${X(i)}" y="${y1+16}" font-size="8" fill="#64748b" text-anchor="middle">${String(p.d||'').slice(5)}</text>`:''}`).join('');
+ return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;direction:ltr">${grid}<polyline points="${line}" fill="none" stroke="#0369a1" stroke-width="2.5" stroke-linejoin="round"/>${dots}</svg>`}
+function childDoc(c,rp,ap,sb,by,now){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])),v=s=>s||s===0?esc(s):'—',nl=s=>v(s).replace(/\n/g,'<br>');
+ const dt=new Date(now),g=dt.toLocaleString('ar-SA-u-ca-gregory-nu-latn',{dateStyle:'long',timeStyle:'short'}),h=dt.toLocaleDateString('ar-SA-u-ca-islamic-umalqura-nu-latn',{dateStyle:'long'});
+ const srt=(a,b)=>String(a.date||'').localeCompare(String(b.date||''))||String(a.createdAt||'').localeCompare(String(b.createdAt||''));
+ const ok=rp.filter(r=>r.status==='approved').sort(srt),pend=rp.length-ok.length,pts=ok.filter(r=>typeof r.progress==='number').map(r=>({d:r.date,p:r.progress}));
+ const first=pts[0],last=pts[pts.length-1],delta=pts.length>1?last.p-first.p:null,col=p=>p>=70?'#16a34a':p>=40?'#d97706':'#e11d48';
+ const done=ap.filter(a=>a.status==='completed').length,miss=ap.filter(a=>a.status==='no_show').length,act=sb.find(x=>x.status==='active');
+ const row=(a,b,c2,d2)=>`<tr><th>${a}</th><td>${b}</td><th>${c2}</th><td>${d2}</td></tr>`;
+ const ses=ok.map((r,i)=>{const pv=typeof r.progress==='number'?r.progress:null,pp=i>0&&typeof ok[i-1].progress==='number'&&pv!==null?pv-ok[i-1].progress:null;
+  return`<div class="ses"><div class="sh"><b>الجلسة ${i+1}</b><span>${v(r.date)} — الأخصائي: ${v(r.doctor)}</span>${pv!==null?`<span class="pc" style="background:${col(pv)}">${pv}%</span>`:''}</div>
+  ${pv!==null?`<div class="bar"><i style="width:${pv}%;background:${col(pv)}"></i></div>${pp!==null?`<div class="dl" style="color:${pp>=0?'#16a34a':'#e11d48'}">${pp>=0?'▲ +':'▼ '}${pp} نقطة عن الجلسة السابقة</div>`:''}`:''}
+  <table class="kv2"><tr><th>التشخيص / التقييم</th><td>${nl(r.diagnosis)}</td></tr><tr><th>الملاحظات (SOAP)</th><td>${nl(r.notes)}</td></tr>${r.needs?`<tr><th>احتياجات الطفل</th><td>${nl(r.needs)}</td></tr>`:''}${r.prescription?`<tr><th>وصفة / أجهزة / أدوية</th><td>${nl(r.prescription)}</td></tr>`:''}${r.exercise?`<tr><th>التمارين المنزلية</th><td>${nl(r.exercise)}</td></tr>`:''}${r.referTo?`<tr><th>تحويل إلى</th><td>${v(r.referTo)}</td></tr>`:''}${r.approvedBy?`<tr><th>اعتمده</th><td>${v(r.approvedBy)}</td></tr>`:''}</table></div>`}).join('');
+ return`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>ملف ${esc(c.name)} - ${esc(c.fileNo)}</title><style>
+@page{size:A4;margin:12mm 11mm 14mm;@bottom-center{content:"صفحة " counter(page) " من " counter(pages);font-size:9px;color:#64748b}}
+*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#0f172a;font-size:12px;line-height:1.75;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+table.pg{width:100%;border-collapse:collapse}table.pg>thead{display:table-header-group}table.pg>tfoot{display:table-footer-group}table.pg>*>tr>td{padding:0}
+.lh{display:flex;align-items:center;gap:12px;padding-bottom:8px;border-bottom:3px solid #0369a1;margin-bottom:10px}
+.lg{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#0369a1,#0891b2);display:grid;place-items:center;flex:none}
+.lt{flex:1}.lt b{font-size:19px;color:#0c4a6e;display:block}.lt small{color:#475569;font-size:11px}
+.lm{font-size:10.5px;color:#334155;border:1px solid #cbd5e1;border-radius:9px;padding:5px 10px;line-height:1.7;min-width:190px}.lm b{color:#0c4a6e}
+.ft{border-top:1px solid #cbd5e1;margin-top:8px;padding-top:5px;font-size:9.5px;color:#64748b;text-align:center}
+.tt{background:#0369a1;color:#fff;text-align:center;font-weight:700;font-size:15px;border-radius:9px;padding:6px;margin-bottom:10px}
+h2{font-size:13px;color:#0c4a6e;border-right:4px solid #0891b2;padding-right:8px;margin:14px 0 6px;break-after:avoid;page-break-after:avoid}
+table.kv{width:100%;border-collapse:collapse}table.kv th{width:15%;background:#f1f5f9;text-align:right;font-weight:700;color:#334155}table.kv td{width:35%}
+table.kv th,table.kv td{border:1px solid #cbd5e1;padding:4px 8px;vertical-align:top}
+.sm{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}.sm div{border:1px solid #cbd5e1;border-radius:9px;padding:6px;text-align:center}.sm b{display:block;font-size:17px;color:#0369a1}.sm span{font-size:10.5px;color:#475569}
+.ch{border:1px solid #cbd5e1;border-radius:9px;padding:8px}
+.ses{border:1px solid #cbd5e1;border-radius:10px;margin:8px 0;overflow:hidden;break-inside:avoid;page-break-inside:avoid}
+.sh{display:flex;gap:10px;align-items:center;background:#f1f5f9;padding:5px 10px}.sh b{color:#0c4a6e}.sh span:nth-child(2){flex:1;color:#475569;font-size:11px}
+.pc{color:#fff;border-radius:20px;padding:1px 10px;font-weight:700;font-size:11px}
+.bar{height:6px;background:#e2e8f0;margin:6px 10px 2px;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%}
+.dl{font-size:10.5px;font-weight:700;margin:0 10px 4px}
+table.kv2{width:100%;border-collapse:collapse}table.kv2 th{width:22%;text-align:right;color:#475569;font-weight:700;padding:3px 10px;vertical-align:top}table.kv2 td{padding:3px 10px;border-bottom:1px dashed #e2e8f0}
+.sg{display:flex;gap:30px;margin-top:26px;break-inside:avoid}.sg div{flex:1;border-top:1px solid #0f172a;text-align:center;padding-top:4px;font-size:11px}
+.note{font-size:10.5px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:5px 8px;margin-top:6px}
+</style></head><body><table class="pg"><thead><tr><td><div class="lh"><div class="lg"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></div><div class="lt"><b>مركز خطوة المستقبل</b><small>للعلاج الطبيعي وتأهيل الأطفال</small></div><div class="lm"><b>تاريخ الإصدار:</b> ${esc(g)}<br><b>الموافق:</b> ${esc(h)} هـ<br><b>رقم الملف:</b> ${v(c.fileNo)} &nbsp; <b>أصدره:</b> ${v(by)}</div></div></td></tr></thead>
+<tfoot><tr><td><div class="ft">وثيقة طبية سرية صادرة من نظام مركز خطوة المستقبل، ولا يجوز تداولها إلا للجهات المصرّح لها.</div></td></tr></tfoot>
+<tbody><tr><td><div class="tt">الملف الطبي الشامل للطفل</div>
+<h2>ورقة بيانات الطفل</h2><table class="kv">${row('الاسم',v(c.name),'رقم الملف',v(c.fileNo))}${row('رقم الهوية',v(c.idno),'تاريخ الميلاد',v(c.dob)+(c.dob?` (${esc(cAge(c.dob))})`:''))}${row('الجنس',v(c.gender),'الجنسية',v(c.nat))}${row('التشخيص',v(c.diagnosis),'حالة الملف',v(c.status))}${row('الفرع',v(c.branch),'الأخصائي المسؤول',v(c.doctor))}${row('تاريخ الانضمام',v(c.joinDate),'الباقة الحالية',act?`${v(act.packageName)} (${act.used}/${act.total})`:'بدون اشتراك فعّال')}${row('الحساسية',v(c.allergies),'الأدوية الحالية',v(c.meds))}<tr><th>التاريخ المرضي</th><td colspan="3">${nl(c.history)}</td></tr></table>
+<h2>بيانات ولي الأمر</h2><table class="kv">${row('الاسم',v(c.momName),'الجوال',v(c.momPhone))}${row('جوال بديل',v(c.altPhone),'العنوان',v(c.address))}<tr><th>ملاحظات الملف</th><td colspan="3">${nl(c.notes)}</td></tr></table>
+<h2>ملخص الحالة وتطورها</h2><div class="sm"><div><b>${ok.length}</b><span>جلسات موثقة ومعتمدة</span></div><div><b>${done}</b><span>مواعيد مكتملة</span></div><div><b>${miss}</b><span>مرات تخلّف</span></div><div><b style="color:${last?col(last.p):'#64748b'}">${last?last.p+'%':'—'}</b><span>آخر نسبة تطور${delta!==null?` (${delta>=0?'+':''}${delta} منذ البداية)`:''}</span></div></div>
+${pts.length>1?`<div class="ch">${progSvg(pts)}</div>`:'<div class="note" style="color:#475569;background:#f8fafc;border-color:#e2e8f0">لا توجد بيانات كافية لرسم منحنى التطور (يلزم تقييمان على الأقل).</div>'}
+<h2>سجل الجلسات والتقارير</h2>${ses||'<div class="note" style="color:#475569;background:#f8fafc;border-color:#e2e8f0">لا توجد جلسات معتمدة في هذا الملف حتى الآن.</div>'}
+${pend?`<div class="note">يوجد ${pend} تقرير بانتظار الاعتماد، ولم يُدرج في هذا الملف.</div>`:''}
+<div class="sg"><div>الأخصائي المسؤول</div><div>مدير المركز</div><div>ختم المركز</div></div></td></tr></tbody></table></body></html>`}
+async function printAsync(build){
+ const w=window.open('','_blank');if(w)w.document.write('<meta charset="utf-8"><body dir="rtl" style="font-family:sans-serif;padding:30px">جاري تجهيز الملف...</body>');
+ let html;try{html=await build()}catch(e){if(w)w.close();return toast('تعذر تجهيز الملف: '+(e.code||e.message||e),0)}
+ if(w){w.document.open();w.document.write(html);w.document.close();setTimeout(()=>{try{w.focus();w.print()}catch(e){}},500);return}
+ let f=document.getElementById('pfr');if(f)f.remove();f=document.createElement('iframe');f.id='pfr';f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
+ const d=f.contentWindow.document;d.open();d.write(html);d.close();setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){}},500)}
+function receiptDoc(x,by,now,fin){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])),v=s=>s||s===0?esc(s):'—';
+ const dt=new Date(now),g=dt.toLocaleString('ar-SA-u-ca-gregory-nu-latn',{dateStyle:'long',timeStyle:'short'}),h=dt.toLocaleDateString('ar-SA-u-ca-islamic-umalqura-nu-latn',{dateStyle:'long'});
+ const amt=Number(x.amount)||0,r=Number(fin?.vatRate)||0,net=r>0?amt/(1+r/100):amt,vat=amt-net,f2=n=>n.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}),no=String(x.id||'').slice(0,6).toUpperCase();
+ return`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>سند قبض ${esc(no)}</title><style>
+@page{size:A4;margin:14mm 12mm}*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#0f172a;font-size:13px;line-height:1.8;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.lh{display:flex;align-items:center;gap:12px;padding-bottom:8px;border-bottom:3px solid #0369a1;margin-bottom:12px}.lg{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#0369a1,#0891b2);display:grid;place-items:center}
+.lt{flex:1}.lt b{font-size:20px;color:#0c4a6e;display:block}.lt small{color:#475569}.lm{font-size:11px;border:1px solid #cbd5e1;border-radius:9px;padding:5px 10px;min-width:200px}
+.tt{background:#0369a1;color:#fff;text-align:center;font-weight:700;font-size:17px;border-radius:9px;padding:7px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:7px 10px;text-align:right;vertical-align:top}th{width:24%;background:#f1f5f9;color:#334155}
+.am{font-size:22px;font-weight:700;color:#0c4a6e}.sg{display:flex;gap:30px;margin-top:50px}.sg div{flex:1;border-top:1px solid #0f172a;text-align:center;padding-top:4px;font-size:12px}
+.nt{font-size:10.5px;color:#64748b;margin-top:18px;border-top:1px solid #e2e8f0;padding-top:6px;text-align:center}</style></head><body>
+<div class="lh"><div class="lg"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></div><div class="lt"><b>مركز خطوة المستقبل</b><small>للعلاج الطبيعي وتأهيل الأطفال</small></div><div class="lm"><b>تاريخ الإصدار:</b> ${esc(g)}<br><b>الموافق:</b> ${esc(h)} هـ<br>${fin?.vatNo?`<b>الرقم الضريبي:</b> ${esc(fin.vatNo)}<br>`:''}${fin?.crNo?`<b>السجل التجاري:</b> ${esc(fin.crNo)}`:''}</div></div>
+<div class="tt">سند قبض رقم ${esc(no)}</div>
+<table><tr><th>التاريخ</th><td>${v(x.date)}</td></tr><tr><th>استلمنا من</th><td>${v(x.client)}</td></tr><tr><th>المبلغ</th><td><span class="am">${f2(amt)}</span> ريال سعودي</td></tr><tr><th>وذلك عن</th><td>${v(x.service)}</td></tr><tr><th>طريقة الدفع</th><td>${v(x.method)}</td></tr>
+${r>0?`<tr><th>المبلغ قبل الضريبة</th><td>${f2(net)} ريال</td></tr><tr><th>ضريبة القيمة المضافة (${r}%)</th><td>${f2(vat)} ريال</td></tr><tr><th>الإجمالي شامل الضريبة</th><td><b>${f2(amt)} ريال</b></td></tr>`:''}</table>
+<div class="sg"><div>المستلم: ${v(by||x.by)}</div><div>المحاسب</div><div>ختم المركز</div></div>
+<div class="nt">هذا المستند سند قبض صادر من نظام مركز خطوة المستقبل، وليس فاتورة ضريبية إلكترونية معتمدة من هيئة الزكاة والضريبة والجمارك.</div></body></html>`}
+function printHtml(html){return printAsync(async()=>html)}
+// PRINT END
+const dayStr=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'})},DEFT='السلام عليكم أ/ {ولي الأمر}\nنذكّركم بموعد {الطفل} في مركز خطوة المستقبل\nيوم {التاريخ} الساعة {الوقت} ({الخدمة}) مع {الأخصائي}.\nفي حال الرغبة بتغيير الموعد يرجى التواصل معنا. نتشرف بحضوركم.';
+const DEPT=[['doctor','طبيب / أخصائي'],['reception','استقبال'],['manager','مدير'],['accountant','محاسب'],['hr','موارد بشرية'],['store','مخزون'],['service','خدمة عملاء'],['it','IT'],['other','أخرى (بدون حساب دخول)']],DL=Object.fromEntries(DEPT);
+const imgData=(f,max,q)=>new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error('read'));r.onload=()=>{const im=new Image();im.onerror=()=>rej(new Error('img'));im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};im.src=r.result};r.readAsDataURL(f)});
+const ex=d=>{if(!d)return'—';const n=Math.ceil((new Date(d)-new Date(today()))/864e5);return n<0?`<span class=tg style="color:#e11d48">${E(d)} (منتهية)</span>`:n<=60?`<span class=tg style="color:#d97706">${E(d)} (باقي ${n} يوم)</span>`:E(d)};
+const PAYMAP=[['fnat','nat'],['fgen','gen'],['fdob','dob'],['fms','ms'],['fem','email'],['fad','addr'],['fec','emerg'],['fidt','idType'],['fid','idNo'],['fide','idExpiry'],['fpp','pp'],['fppe','ppExpiry'],['fct','contract'],['fce','contractEnd'],['fgo','gosi'],['fls','lic'],['flse','licExpiry'],['fq','qual'],['fsal','salary'],['fhs','housing'],['ftr','transport'],['fot','other'],['fbk','bank'],['fib','iban'],['fnt','notes']];
+const sForm=id=>`<h3>${id?'تعديل ملف موظف':'إضافة موظف'}</h3>
+<h4>البيانات الشخصية</h4><div class=g2>${I('fn','الاسم الكامل')}${I('fnat','الجنسية')}${S('fgen','الجنس',[['','—'],['ذكر','ذكر'],['أنثى','أنثى']])}${I('fdob','تاريخ الميلاد','date')}${S('fms','الحالة الاجتماعية',[['','—'],['أعزب','أعزب'],['متزوج','متزوج'],['مطلق','مطلق'],['أرمل','أرمل']])}${I('fph','الجوال','tel')}${I('fem','البريد الإلكتروني','email')}${I('fad','العنوان')}${I('fec','جهة اتصال للطوارئ (الاسم والجوال)')}</div>
+<h4>الهوية والإقامة</h4><div class=g2>${S('fidt','نوع الوثيقة',[['هوية وطنية','هوية وطنية'],['إقامة','إقامة']])}${I('fid','رقم الهوية / الإقامة')}${I('fide','تاريخ انتهاء الهوية / الإقامة','date')}${I('fpp','رقم الجواز')}${I('fppe','تاريخ انتهاء الجواز','date')}</div>
+<h4>الوظيفة</h4><div class=g2>${S('fdept','القسم',DEPT)}${S('ftit','الاختصاص (للأخصائيين)',[['','—'],...SPEC().map(x=>[x,x])])}${I('fjt','المسمى الوظيفي')}${S('fbr','الفرع',BR().map(x=>[x,x]))}${I('fjd','تاريخ التعيين','date')}${S('fct','نوع العقد',[['','—'],['دائم','دائم'],['محدد المدة','محدد المدة'],['دوام جزئي','دوام جزئي'],['تعاقد','تعاقد']])}${I('fce','تاريخ انتهاء العقد','date')}${I('fgo','رقم التأمينات')}${I('fls','رقم الترخيص المهني')}${I('flse','تاريخ انتهاء الترخيص','date')}${I('fq','المؤهل العلمي')}</div>
+<h4>الراتب والبنك</h4><div class=g2>${I('fsal','الراتب الأساسي','number')}${I('fhs','بدل السكن','number')}${I('ftr','بدل المواصلات','number')}${I('fot','بدلات أخرى','number')}${I('fbk','البنك')}${I('fib','الآيبان')}</div>
+<h4>المرفقات (صور فقط)</h4><div class=g2><label>الصورة الشخصية<input id=fimg type=file accept="image/*"></label><label>صورة الهوية<input id=fd_id type=file accept="image/*"></label><label>صورة الإقامة<input id=fd_iqama type=file accept="image/*"></label><label>مرفق آخر (ترخيص / عقد)<input id=fd_other type=file accept="image/*"></label></div>
+${id?'<small style="color:var(--g)">اختيار صورة جديدة يستبدل القديمة، وترك الحقل فارغاً يُبقيها.</small>':`<h4>حساب الدخول (اختياري، لغير قسم "أخرى")</h4><div class=g2>${I('fun','اسم المستخدم (إنجليزي)')}${I('fpw','كلمة المرور')}</div>`}
+${I('fnt','ملاحظات')}${B('ssave',id,'حفظ','gr')}${B('close','','إلغاء','o')}`;
+function sOpen(id){const s=id?D.staff.find(x=>x.id===id):null,p=id?(D.payroll.find(x=>x.id===id)||{}):{};
+ $('dlg').className='w';$('dlg').innerHTML=sForm(id);const set=(k,v)=>{const e=$(k);if(e&&v!=null)e.value=v};
+ if(s){[['fn','name'],['fdept','dept'],['fjt','jobTitle'],['fbr','branch'],['fph','phone'],['fjd','joinDate']].forEach(([k,f])=>set(k,s[f]));
+  set('ftit',s.spec!==undefined?s.spec:(SPEC().includes(s.title)?s.title:''));if(!s.jobTitle&&s.title&&!SPEC().includes(s.title))set('fjt',s.title);if(!s.dept)set('fdept','doctor')}
+ PAYMAP.forEach(([k,f])=>set(k,p[f]));$('dlg').showModal()}
+const t24=t=>{const m=String(t||'').match(/(\d{1,2}):(\d{2})/);let h=m?+m[1]:0;if(/عصر|مساء/.test(t||'')&&h<12)h+=12;return String(h).padStart(2,'0')+(m?m[2]:'00')};
+const svcKey=s=>String(s||'').replace('جلسة','').split(/\s+/).map(w=>w.replace(/^و/,'')).filter(Boolean).sort().join('-');
+const slotKey=(d,dt,t)=>[d,dt,t24(t)].join('_').replace(/[\/\s]+/g,'-');
+const childKeys=(f,dt,t,s)=>[`c-${f}-${dt}-s-${svcKey(s)}`,`c-${f}-${dt}-t-${t24(t)}`];
+const LKEY='khatwa_lock',SKEY='khatwa_ss',MAXH=8,IDLE=10*60*1000;
+let idleT;const idleReset=()=>{clearTimeout(idleT);if(auth.currentUser&&!$('lockscr'))idleT=setTimeout(()=>lockUI(true),IDLE)};
+['click','keydown','touchstart','mousemove'].forEach(ev=>document.addEventListener(ev,idleReset,{passive:true}));
+function lockUI(show){let d=$('lockscr');
+ if(!show){if(d)d.remove();try{localStorage.removeItem(LKEY)}catch(_){}idleReset();return}
+ try{localStorage.setItem(LKEY,'1')}catch(_){}clearTimeout(idleT);
+ if(!d){d=document.createElement('div');d.id='lockscr';d.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;background:linear-gradient(160deg,var(--bg),#bae6fd)';document.body.append(d)}
+ const nm=()=>E(({doctor:'الطبيب',manager:'المدير'}[U.role]||'')+' '+(U.name||auth.currentUser?.email||''));
+ d.innerHTML=`<div class="card" style="width:100%;max-width:380px;text-align:center"><div style="width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:linear-gradient(135deg,#0284c7,#0d9488);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px"><i class="fa-solid fa-lock"></i></div><h2 id="lknm" style="margin-bottom:6px">أهلاً بك ${nm()}</h2><small style="color:var(--g)">الشاشة مقفلة مؤقتاً، أدخل كلمة المرور للمتابعة</small><label style="margin-top:14px;text-align:right">كلمة المرور<input id="lkpw" type="password" autocomplete="current-password"></label><button class="b" style="width:100%" data-a="unlock">فتح</button><button class="b o" style="width:100%;margin-top:6px" data-a="lkout">تبديل المستخدم</button></div>`;
+ $('lkpw').addEventListener('keydown',e=>{if(e.key==='Enter')unlockNow()});setTimeout(()=>{$('lkpw')?.focus();const h=$('lknm');if(h)h.textContent='أهلاً بك '+nm().replace(/&amp;/g,'&')},1500)}
+async function unlockNow(){const p=$('lkpw')?.value;if(!p)return;try{await reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(auth.currentUser.email,p));lockUI(false)}catch(e){toast('كلمة المرور غير صحيحة',0)}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;if(b.dataset.a==='lock')lockUI(true);if(b.dataset.a==='unlock')unlockNow();if(b.dataset.a==='lkout'){lockUI(false);signOut(auth)}});
+const sessCheck=()=>{const u=auth.currentUser;if(!u)return;let ss=null;try{ss=JSON.parse(localStorage.getItem(SKEY)||'null')}catch(_){}
+ if(!ss||ss.uid!==u.uid){ss={uid:u.uid,start:Date.now()};try{localStorage.setItem(SKEY,JSON.stringify(ss))}catch(_){}}
+ if(Date.now()-ss.start>MAXH*3600*1000){toast('انتهت مدة الجلسة (8 ساعات)، سجّل الدخول من جديد',0);signOut(auth)}};
+onAuthStateChanged(auth,u=>{if(!u){try{localStorage.removeItem(SKEY);localStorage.removeItem(LKEY)}catch(_){}const d=$('lockscr');if(d)d.remove();return}sessCheck();if(localStorage.getItem(LKEY)==='1')lockUI(true);else idleReset()});
+setInterval(sessCheck,60000);
+const LST={pending:'قيد المراجعة',approved:'تمت الموافقة',rejected:'مرفوض'};
+const NS={list:[],seen:0,key:''};
+function notifRender(){const n=NS.list.filter(x=>Date.parse(x.createdAt)>NS.seen).length,c=$('bellc');if(c){c.textContent=n;c.style.display=n?'flex':'none'}}
+function notifOpen(){let p=$('ntp');if(p){p.remove();return}
+ p=document.createElement('div');p.id='ntp';p.style.cssText='position:fixed;top:64px;left:12px;width:min(92vw,360px);max-height:60vh;overflow:auto;z-index:70;background:var(--c);border:1px solid var(--l);border-radius:14px;padding:12px;box-shadow:0 8px 24px #0003';
+ p.innerHTML='<b>الإشعارات</b>'+(NS.list.length?NS.list.slice(0,30).map(x=>`<div style="padding:8px 0;border-bottom:1px solid var(--l)"><b>${E(x.title)}</b><br><small>${E(x.body)}</small><br><small style="color:var(--g)">${E((x.createdAt||'').slice(0,16).replace('T',' '))}</small></div>`).join(''):'<p class=mu>لا توجد إشعارات</p>');
+ document.body.append(p);NS.seen=Date.now();ls(NS.key,String(NS.seen));notifRender()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a="bell"]');if(b)notifOpen();else if(!e.target.closest('#ntp'))$('ntp')?.remove()});
+const ADIG='٠١٢٣٤٥٦٧٨٩';
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='ci'||t.id==='mp')t.value=t.value.replace(/[٠-٩]/g,d=>ADIG.indexOf(d)).replace(/\D/g,'').slice(0,10)});
+const EN={"الإحصائيات": "Dashboard", "المواعيد وتأكيد الحضور": "Appointments & Check-in", "قائمة الانتظار": "Waiting Queue", "إضافة موعد": "New Appointment", "فتح ملف جديد": "New File", "بوابة الأطباء": "Doctors Portal", "اعتماد التقارير": "Report Approval", "حضور الموظفين": "Staff Attendance", "الفواتير": "Invoices", "سجلات الأطفال": "Children Records", "شؤون الموظفين": "Staff Affairs", "الاختصاصات الطبية": "Specialties", "الفروع": "Branches", "الموظفون والرواتب": "Staff & Payroll", "الحسابات والتقارير المالية": "Accounting & Finance", "المخزون": "Inventory", "خدمة العملاء": "Customer Service", "الباقات والأسعار": "Packages & Prices", "الاشتراك في الباقات": "Package Subscriptions", "المراسلات": "Messages", "سجل العمليات": "Activity Log", "الأرشيف": "Archive", "النسخ الاحتياطي": "Backup", "حسابات أولياء الأمور": "Parent Accounts", "مستخدمو النظام": "System Users", "تصدير واستيراد البيانات": "Data Export & Import", "تذكير المواعيد": "Appointment Reminders", "مؤشرات الأداء": "KPIs", "الصلاحيات (IT)": "Permissions (IT)", "جدولي": "My Schedule", "طلب استئذان": "Leave Request", "طلبات الاستئذان": "Leave Requests", "إرسال إشعار": "Send Notification", "مركز خطوة المستقبل": "Khatwa Future Center", "مركز خطوة المستقبل للعلاج الطبيعي": "Khatwa Future Physiotherapy Center", "البريد الإلكتروني": "Email", "كلمة المرور": "Password", "دخول": "Login", "خروج": "Logout", "ليس أنت؟ تبديل المستخدم": "Not you? Switch user", "تبديل المستخدم": "Switch user", "قفل مؤقت": "Lock", "فتح": "Unlock", "الشاشة مقفلة مؤقتاً، أدخل كلمة المرور للمتابعة": "Screen locked. Enter your password to continue", "الإشعارات": "Notifications", "لا توجد إشعارات": "No notifications", "أهلاً بك": "Welcome", "حفظ": "Save", "إضافة": "Add", "حذف": "Delete", "إلغاء": "Cancel", "تأكيد": "Confirm", "بحث": "Search", "إرسال": "Send", "موافقة": "Approve", "رفض": "Reject", "تعديل": "Edit", "أرشفة": "Archive", "الملف": "File", "تسجيل حضور": "Check in", "تخلّف": "No-show", "بدء الجلسة": "Start session", "ملف الطفل": "Child file", "إغلاق": "Close", "الاسم": "Name", "الطفل": "Child", "الخدمة": "Service", "الأخصائي": "Therapist", "الموعد": "Appointment", "الحالة": "Status", "إجراء": "Action", "التاريخ": "Date", "الوقت": "Time", "المبلغ": "Amount", "الدفع": "Payment", "الجوال": "Mobile", "التشخيص": "Diagnosis", "الهوية": "ID", "الدور": "Role", "النوع": "Type", "من": "From", "إلى": "To", "السبب": "Reason", "الباقة": "Package", "المتبقي": "Remaining", "الكمية": "Quantity", "الوحدة": "Unit", "الصنف": "Item", "الفرع": "Branch", "المسمى": "Title", "الراتب": "Salary", "المنفذ": "By", "العملية": "Action", "التفاصيل": "Details", "الشاشة": "Screen", "بانتظار الحضور": "Waiting", "حاضر": "Present", "مكتملة": "Completed", "قيد المراجعة": "Pending review", "تمت الموافقة": "Approved", "مرفوض": "Rejected", "اسم الأم": "Mother name", "جوال الأم (05xxxxxxxx)": "Mother mobile (05xxxxxxxx)", "اسم الطفل": "Child name", "رقم هوية الطفل": "Child ID number", "تاريخ الميلاد": "Date of birth", "الجنس": "Gender", "ذكر": "Male", "أنثى": "Female", "التاريخ الطبي": "Medical history", "رقم الملف": "File number", "لا توجد بيانات": "No data", "لا توجد طلبات": "No requests", "لا توجد رسائل": "No messages", "الوارد": "Inbox", "المرسل": "Sent", "رسالة جديدة": "New message", "الموضوع": "Subject", "الرسالة": "Message", "العنوان": "Title", "النص": "Text", "الجميع": "Everyone", "الأطباء": "Doctors", "الاستقبال": "Reception", "المدير": "Manager", "المحاسبة": "Accounting", "الموارد البشرية": "HR", "إرسال للمدير": "Send to manager", "اليوم": "Today", "غداً": "Tomorrow", "تصدير Excel": "Export Excel", "طلباتي": "My requests", "إشعار جديد": "New notification", "آخر": "Last", "جيد": "Good", "ر.س": "SAR", "سجل": "Record", "سنة": "Year", "شهر": "Month", "قسم": "Department", "ملف": "File", "يوم": "Day", "أخرى": "Other", "أرمل": "Widowed", "أعزب": "Single", "الكل": "All", "باقي": "Remaining", "جديد": "New", "جلسة": "Session", "حضور": "Attendance", "دائم": "Permanent", "ريال": "Riyal", "صفحة": "Page", "طبيب": "Doctor", "مدير": "Manager", "مطلق": "Divorced", "متزوج": "Married", "إجازة": "Vacation", "إقامة": "Residency", "إيقاف": "Suspend", "الأحد": "Sunday", "الإثنين": "Monday", "الثلاثاء": "Tuesday", "الأربعاء": "Wednesday", "الخميس": "Thursday", "الجمعة": "Friday", "السبت": "Saturday", "البنك": "Bank", "الرقم": "Number", "السجل": "Record", "السعر": "Price", "العقد": "Contract", "القسم": "Department", "انصرف": "Left", "تحديث": "Update", "تسجيل": "Register", "تصدير": "Export", "تعاقد": "Contracted", "تفعيل": "Activate", "طوارئ": "Emergency", "فعّال": "Active", "قُرئت": "Read", "مؤرشف": "Archived", "متبقي": "Remaining", "متوقف": "Stopped", "محاسب": "Accountant", "محددة": "Specific", "مخزون": "Inventory", "مستمر": "Ongoing", "معتمد": "Approved", "منتهي": "Ended", "منخفض": "Low", "موقوف": "Suspended", "نقداً": "Cash", "اعتماد": "Approval", "البريد": "Email", "التطور": "Progress", "الجلسة": "Session", "الساعة": "Hour", "الطبيب": "Doctor", "العميل": "Customer", "المؤهل": "Qualification", "الموظف": "Employee", "انصراف": "Check-out", "حالاتي": "My cases", "متابعة": "Follow-up", "مقروءة": "Read", "ملاحظة": "Note", "استئذان": "Permission", "استعادة": "Restore", "استقبال": "Reception", "استيراد": "Import", "الآيبان": "IBAN", "الأدوية": "Medications", "الأطفال": "Children", "الإصدار": "Version", "الباقات": "Packages", "التذكير": "Reminder", "الجلسات": "Sessions", "الجنسية": "Nationality", "الساعات": "Hours", "المحاسب": "Accountant", "المدينة": "City", "المراجع": "Client", "المعرّف": "ID", "الميلاد": "Birth", "الوظيفة": "Job", "سند قبض": "Receipt voucher", "ملاحظات": "Notes", "لا توجد": "None", "لم يسجل": "Not recorded", "الاختصاص": "Specialty", "الاشتراك": "Subscription", "الانضمام": "Joined", "التمارين": "Exercises", "الحساسية": "Allergies", "المستخدم": "User", "المعتمدة": "Approved", "الملاحظة": "Note", "الموظفون": "Staff", "حفظ النص": "Save text", "صنف جديد": "New item", "لا نتائج": "No results", "لم تُقرأ": "Unread", "ملف جديد": "New file", "من تاريخ": "From date", "اسم الصنف": "Item name", "اسم الفرع": "Branch name", "التأمينات": "Insurance", "الملاحظات": "Notes", "بدل السكن": "Housing allowance", "جوال بديل": "Alternate mobile", "حفظ السند": "Save voucher", "دوام جزئي": "Part-time", "من الساعة": "From hour", "موعد جديد": "New appointment", "نوع العقد": "Contract type", "ولي الأمر": "Guardian", "إضافة موظف": "Add employee", "إلى الساعة": "To hour", "اسم الباقة": "Package name", "اسم الموظف": "Employee name", "الأخصائيون": "Therapists", "الاختصاصات": "Specialties", "الاشتراكات": "Subscriptions", "المستخدمون": "Users", "باقة جديدة": "New package", "بدلات أخرى": "Other allowances", "تحويل بنكي": "Bank transfer", "تحويل حالة": "Case referral", "تسجيل خروج": "Logout", "تسجيل دخول": "Login", "تم الاطلاع": "Acknowledged", "تم التحديث": "Updated", "تم التسجيل": "Registered", "حالة الملف": "File status", "حد التنبيه": "Alert threshold", "حفظ الموعد": "Save appointment", "ختم المركز": "Center stamp", "خدمة عملاء": "Customer service", "رقم الجواز": "Passport number", "رقم الجوال": "Mobile number", "رقم الهوية": "ID number", "ريال سعودي": "Saudi riyal", "سعر الجلسة": "Session price", "شبكة (مدى)": "Card (Mada)", "مرات تخلّف": "No-show count", "ملف الحالة": "Case file", "هوية وطنية": "National ID", "وقت الحضور": "Arrival time", "وقت الدخول": "Check-in time", "آخر السندات": "Latest vouchers", "اختر الباقة": "Choose package", "اشتراك جديد": "New subscription", "الحد الأدنى": "Minimum", "السعر (ر.س)": "Price (SAR)", "تحويل الطفل": "Refer child", "تم الاعتماد": "Approved", "تم رفض طلبك": "Your request was rejected", "تمت الإضافة": "Added", "جهة الطوارئ": "Emergency contact", "رقم الترخيص": "License number", "صورة الهوية": "ID photo", "طريقة الدفع": "Payment method", "عدد الجلسات": "Number of sessions", "مدير المركز": "Center manager", "موارد بشرية": "HR", "نسبة التخلف": "No-show rate", "نوع الوثيقة": "Document type", "أمين المخزون": "Storekeeper", "أو رقم الملف": "or file number", "إجمالي الشهر": "Month total", "إجمالي اليوم": "Today total", "إرسال واتساب": "Send WhatsApp", "إضافة مستخدم": "Add user", "اسم المستخدم": "Username", "اكتب الرسالة": "Write the message", "الاسم الكامل": "Full name", "المبلغ (ر.س)": "Amount (SAR)", "انتهاء العقد": "Contract end", "بوابة المدير": "Manager portal", "بيانات الطفل": "Child details", "تسجيل الدخول": "Login", "تعديل الراتب": "Edit salary", "تعديل مستخدم": "Edit user", "تم حفظ السند": "Voucher saved", "تم فتح الملف": "File opened", "تمارا / تابي": "Tamara / Tabby", "سُجّل الحضور": "Attendance recorded", "صورة الإقامة": "Residency photo", "عدد الموظفين": "Employees count", "لا يوجد جوال": "No mobile", "لا يوجد مرفق": "No attachment", "مسؤول النظام": "System admin", "مسح الاختيار": "Clear selection", "معرّف الحساب": "Account ID", "معرّف المنفذ": "Performer ID", "معرّف الموظف": "Employee ID", "مواعيد اليوم": "Today appointments", "موجود مسبقاً": "Already exists", "نسبة الضريبة": "Tax rate", "وقت الانصراف": "Check-out time", "آخر نسبة تطور": "Latest progress", "أرشيف السندات": "Vouchers archive", "أُرسل الإشعار": "Notification sent", "أُرسل التقرير": "Report sent", "إعادة الإرسال": "Resend", "اسم ولي الأمر": "Guardian name", "الخدمة/الباقة": "Service/Package", "الراتب والبنك": "Salary & bank", "الرقم الوظيفي": "Employee number", "الفرع الرئيسي": "Main branch", "المؤهل العلمي": "Qualification", "انتهاء الجواز": "Passport expiry", "انتهاء الهوية": "ID expiry", "بدل المواصلات": "Transport allowance", "بوابة المخزون": "Inventory portal", "تاريخ الأرشفة": "Archive date"};let LANG=ls('khatwa_lang')||'ar';
+const qt=document.createElement('div');qt.id='qtog';qt.innerHTML='<button class="b o" id="lgb" data-a="lang">EN</button><button class="b o" id="thb" data-a="theme"></button>';document.body.append(qt);
+const setTheme=t=>{document.documentElement.dataset.theme=t;ls('khatwa_theme',t);$('thb').innerHTML=t==='dark'?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>'};
+setTheme(ls('khatwa_theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+const trNode=n=>{if(LANG!=='en')return;if(n.nodeType===3){const t=n.nodeValue.trim();if(t&&EN[t]&&n._ar===undefined){n._ar=n.nodeValue;n.nodeValue=n.nodeValue.replace(t,EN[t])}}else if(n.nodeType===1){['placeholder','title'].forEach(a=>{const v=n.getAttribute(a);if(v&&EN[v]){n['_'+a]=v;n.setAttribute(a,EN[v])}});n.childNodes.forEach(trNode)}};
+const untr=n=>{if(n.nodeType===3){if(n._ar!==undefined){n.nodeValue=n._ar;n._ar=undefined}}else if(n.nodeType===1){['placeholder','title'].forEach(a=>{if(n['_'+a]){n.setAttribute(a,n['_'+a]);n['_'+a]=null}});n.childNodes.forEach(untr)}};
+function setLang(l){LANG=l;ls('khatwa_lang',l);document.documentElement.lang=l;document.documentElement.dir=l==='ar'?'rtl':'ltr';$('lgb').textContent=l==='ar'?'EN':'عربي';l==='en'?trNode(document.body):untr(document.body)}
+new MutationObserver(ms=>{if(LANG==='en')ms.forEach(m=>m.addedNodes.forEach(trNode))}).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',e=>{const b=e.target.closest('#qtog [data-a]');if(!b)return;if(b.dataset.a==='lang')setLang(LANG==='ar'?'en':'ar');if(b.dataset.a==='theme')setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
+setLang(LANG);
+Object.assign(EN,{"هاتف المستشفى":"Hospital phone","بطاقتي":"My ID","طباعة":"Print","بيانات البطاقة":"Card data","رقم الهوية / الإقامة":"ID / Iqama number","تاريخ انتهاء البطاقة":"Card expiry date","صورة الموظف":"Employee photo","حفظ بيانات البطاقة":"Save card data","بيانات المستشفى":"Hospital data","اسم المستشفى":"Hospital name","شعار المستشفى":"Hospital logo","حفظ بيانات المستشفى":"Save hospital data","الموظف":"Employee"});
+let HOSP={};const CS={sel:'me'};
+const cardOf=n=>D.staff_cards.find(c=>c.name===n)||{};
+const fileImg=(f,max,mime)=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL(mime,.85))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(f)});
+const profFor=sel=>{const adm=sel&&sel!=='me',st=adm?D.staff.find(x=>x.id===sel):D.staff.find(x=>x.name===U.name),name=adm?(st?.name||''):U.name,c=cardOf(name);return{name,role:adm?'':RL[U.role],title:st?.title,empNo:st?.empNo,idno:c.idno,expiry:c.expiry,photo:c.photo||st?.photo,st}};
+const vkey=p=>p.empNo||p.name||'';
+function qrSvg(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag(2,0)}catch(_){return ''}}
+function qrFoot(p){const k=vkey(p);if(!k||typeof qrcode==='undefined')return '';return `<div class="idf"><div class="idq">${qrSvg(location.href.split('#')[0]+'#verify='+encodeURIComponent(k))}</div><span><b>امسح للتحقق · Scan to verify</b><br>${HOSP.phone?'عند العثور على البطاقة اتصل: <b dir=ltr>'+E(HOSP.phone)+'</b>':'هذه البطاقة ملك للمنشأة · Property of the facility'}</span></div>`}
+function cardHtml(p){const exp=p.expiry||'',days=exp?Math.ceil((new Date(exp+'T00:00:00')-new Date())/864e5):null,
+ stt=days==null?{c:'#64748b',t:'تاريخ الانتهاء غير مسجّل',e:'EXPIRY NOT SET'}:days<0?{c:'#e11d48',t:'منتهية منذ '+exp,e:'EXPIRED'}:days<30?{c:'#d97706',t:'تنتهي قريباً '+exp,e:'EXPIRES SOON'}:{c:'#16a34a',t:'سارية حتى '+exp,e:'VALID'},
+ w='M0 14H40L46 14L50 4L56 22L61 9L65 14H110L116 14L120 3L126 22L131 8L135 14H204';
+ return `<div class="idcard"><div class="idh">${HOSP.logo?`<img src="${E(HOSP.logo)}" alt="">`:'<i class="fa-solid fa-hospital"></i>'}<b>${E(HOSP.name||'اسم المستشفى')}</b><small><i class="fa-solid fa-heart-pulse idbeat"></i> بطاقة عمل · STAFF ID</small><svg class="ecg" viewBox="0 0 204 24"><path class="ecg0" d="${w}"/><path class="ecg1" pathLength="200" d="${w}"/></svg></div>
+ <div class="idph">${p.photo?`<img src="${E(p.photo)}" alt="">`:'<i class="fa-solid fa-user"></i>'}</div>
+ <div class="idn">${E(p.name||'—')}</div><div class="idt">${E(p.role||p.title||'')}</div>
+ <div class="idr"><span>الهوية / الإقامة · ID</span><b>${E(p.idno||'—')}</b></div>
+ <div class="idr"><span>الرقم الوظيفي · Emp. No</span><b>${E(p.empNo||'—')}</b></div>
+ <div class="idr"><span>التخصص · Specialty</span><b>${E(p.title||'—')}</b></div>
+ ${qrFoot(p)}<div class="idv" style="background:${stt.c}"><i class="fa-solid fa-circle"></i> ${E(stt.t)} · ${stt.e}</div></div>`}
+function drawCard(){const d=$('idc');if(!d)return;const adm=['manager','it','hr'].includes(U.role),p=profFor(CS.sel),opts=[['me','بطاقتي (أنا)'],...D.staff.map(x=>[x.id,x.name])],bx='width:min(92vw,420px)';
+ d.innerHTML=(CS.v?`<div class="idnp card" style="padding:10px;${bx};border-color:${CS.v.ok?'#16a34a':'#e11d48'};color:${CS.v.ok?'#16a34a':'#e11d48'};font-weight:800;text-align:center">${E(CS.v.msg)}</div>`:'')+(adm?`<div class="idnp card" style="padding:10px;${bx}"><label style="margin:0">الموظف<select id="cs">${opts.map(o=>`<option value="${E(o[0])}"${o[0]===CS.sel?' selected':''}>${E(o[1])}</option>`).join('')}</select></label></div>`:'')+cardHtml(p)+
+ `<div class="idnp"><button class="b" data-a="cardprint"><i class="fa-solid fa-print"></i> طباعة</button> <button class="b o" data-a="cardclose">إغلاق</button></div>`+
+ (adm?`<div class="idnp card" style="${bx}"><h3>بيانات البطاقة</h3><div class=g2>${I('cdi','رقم الهوية / الإقامة')}${I('cde','تاريخ انتهاء البطاقة','date')}</div><label>صورة الموظف<input id="cdp" type="file" accept="image/*"></label><button class="b" data-a="cardsave">حفظ بيانات البطاقة</button></div>`:'')+
+ (['manager','it'].includes(U.role)?`<div class="idnp card" style="${bx}"><h3>بيانات المستشفى</h3>${I('hn','اسم المستشفى')}${I('hph','هاتف المستشفى')}<label>شعار المستشفى<input id="hlogo" type="file" accept="image/*"></label><button class="b" data-a="hospsave">حفظ بيانات المستشفى</button></div>`:'');
+ if(adm){$('cdi').value=p.idno||'';$('cde').value=p.expiry||''}if($('hn')){$('hn').value=HOSP.name||'';$('hph').value=HOSP.phone||''}}
+async function cardSave(){const adm=CS.sel&&CS.sel!=='me',st=adm?D.staff.find(x=>x.id===CS.sel):D.staff.find(x=>x.name===U.name),name=adm?st?.name:U.name;if(!name)return;
+ const idno=val('cdi'),f=$('cdp')?.files[0];if(idno&&!/^\d{10}$/.test(idno))return toast('رقم الهوية / الإقامة يجب أن يكون 10 أرقام',0);
+ const data={name,idno,expiry:val('cde'),by:U.name,updatedAt:new Date().toISOString()};
+ if(f){try{data.photo=await fileImg(f,240,'image/jpeg');if(data.photo.length>150000)return toast('الصورة كبيرة، اختر صورة أصغر',0)}catch(_){return toast('تعذر قراءة الصورة',0)}}
+ if(await run(setDoc(doc(db,'staff_cards',st?.id||('u_'+U.uid)),data,{merge:true}),'تم حفظ بيانات البطاقة'))setTimeout(drawCard,700)}
+async function hospSave(){const f=$('hlogo')?.files[0],data={name:val('hn'),phone:val('hph'),by:U.name};if(!data.name)return toast('أدخل اسم المستشفى',0);
+ if(f){try{data.logo=await fileImg(f,200,'image/png');if(data.logo.length>150000)return toast('الشعار كبير، اختر صورة أصغر',0)}catch(_){return toast('تعذر قراءة الشعار',0)}}
+ run(setDoc(doc(db,'settings','hospital'),data,{merge:true}),'تم حفظ بيانات المستشفى')}
+function openCard(){if($('idc')){$('idc').remove();return}const d=document.createElement('div');d.id='idc';d.addEventListener('click',e=>{if(e.target===d)d.remove()});document.body.append(d);CS.sel='me';CS.v=null;drawCard()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='idcard')openCard();if(a==='cardclose')$('idc')?.remove();if(a==='cardprint')print();if(a==='cardsave')cardSave();if(a==='hospsave')hospSave()});
+document.addEventListener('change',e=>{if(e.target.id==='cs'){CS.sel=e.target.value;CS.v=null;drawCard()}});
+document.addEventListener('input',e=>{if(e.target.id==='cdi')e.target.value=e.target.value.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,'').slice(0,10)});
+function miniUpd(){const ph=$('mini-ph');if(!ph||!U.name)return;const p=profFor('me'),n=$('mini-n');if(n)n.textContent=U.name;const k=p.photo?p.photo.slice(-24):'';if(p.photo&&ph.dataset.p!==k){ph.dataset.p=k;ph.innerHTML=`<img src="${E(p.photo)}" style="width:100%;height:100%;object-fit:cover" alt="">`}}
+setInterval(miniUpd,2000);
+function checkVerify(){if(!location.hash.startsWith('#verify=')||!auth.currentUser||!U.role||!D.staff.length)return;
+ if(!window._vt)window._vt=Date.now();if(Date.now()-window._vt<3000)return;window._vt=0;
+ const k=decodeURIComponent(location.hash.slice(8));history.replaceState(null,'',location.pathname+location.search);
+ if(!['manager','it','hr'].includes(U.role))return toast('التحقق من البطاقات للإدارة والموارد البشرية فقط',0);
+ const st=D.staff.find(x=>x.empNo===k||x.name===k);if(!st)return toast('البطاقة غير موجودة في النظام',0);
+ const c=cardOf(st.name),ok=!!c.expiry&&c.expiry>=today()&&st.status!=='منتهي';
+ if(!$('idc'))openCard();CS.sel=st.id;CS.v={ok,msg:ok?'✔ بطاقة سارية حتى '+c.expiry:(c.expiry?'✖ البطاقة منتهية أو الموظف غير فعّال':'✖ لا يوجد تاريخ انتهاء مسجّل')};drawCard()}
+setInterval(checkVerify,1500);
+const ask=(m,ok='تأكيد')=>new Promise(r=>{const d=$('cfm');d.innerHTML=`<p style="font-weight:700;margin-bottom:14px">${E(m)}</p><button class="b r" id=cfy>${E(ok)}</button><button class="b o" id=cfn>إلغاء</button>`;const f=v=>{d.close();r(v)};$('cfy').onclick=()=>f(true);$('cfn').onclick=()=>f(false);d.oncancel=()=>r(false);d.showModal()});
+const askVal=(m,v='')=>new Promise(r=>{const d=$('cfm');d.innerHTML=`<p style="font-weight:700">${E(m)}</p><input id=cfv type=number inputmode=decimal value="${E(v)}" style="margin:8px 0 14px"><button class="b gr" id=cfy>حفظ</button><button class="b o" id=cfn>إلغاء</button>`;const f=x=>{d.close();r(x)};$('cfy').onclick=()=>f($('cfv').value);$('cfn').onclick=()=>f(null);d.oncancel=()=>r(null);d.showModal();$('cfv').focus()});
+const del=async(c,id,m)=>await ask(m,'حذف')&&run(deleteDoc(doc(db,c,id)),'تم الحذف');
+const qty=(id,d)=>{const x=D.inventory.find(y=>y.id===id);if(x)run(updateDoc(doc(db,'inventory',id),{qty:Math.max(0,(+x.qty||0)+d),updatedAt:new Date().toISOString()}))};
+const staffOpts=()=>[['','-- اختر الأخصائي --'],...D.staff.filter(s=>!s.archived&&(!s.dept||s.dept==='doctor')).map(s=>[s.name,`${s.name} (${s.title||''})`])];
+const fillStaff=id=>{const s=$(id);if(s&&s.options.length!==staffOpts().length){const v=s.value;s.innerHTML=staffOpts().map(o=>`<option value="${E(o[0])}">${E(o[1])}</option>`).join('');s.value=v}};
+
+/* ---------- الشاشات: r = الهيكل (مرة واحدة)، u = تحديث البيانات ---------- */
+const SC={
+home:{n:'الإحصائيات',i:'chart-pie',r:()=>'<div class=kp id=kp></div>',u(){const k=$('kp');if(!k)return;
+ k.innerHTML=[['الأطفال',D.children.length],['المواعيد (آخر 60 يوماً)',D.appointments.length],['مواعيد اليوم',D.appointments.filter(a=>a.date===today()).length],['الأخصائيون',D.staff.length],['تقارير بانتظار الاعتماد',D.reports.filter(r=>r.status==='pending').length]].map(([a,b])=>`<div class=card><small>${a}</small><h2>${b}</h2></div>`).join('')}},
+
+checkin:{n:'المواعيد وتأكيد الحضور',i:'user-check',r:()=>`<div class=card><h3>الاستعلام وتأكيد الحضور</h3>${I('q','رقم الملف أو الاسم أو الهوية')}<div id=tb></div></div>`,u(){
+ if(!$('tb'))return;const q=val('q').toLowerCase();
+ const r=q?D.appointments.filter(a=>[a.fileNo,a.childName,a.idno].some(x=>String(x||'').toLowerCase().includes(q))):[];
+ $('tb').innerHTML=T(['الملف','الطفل','الخدمة','الأخصائي','الموعد','الحالة','إجراء'],r.map(a=>[V(a.fileNo),V(a.childName),V(a.service),V(a.doctor),V(a.date)+' '+V(a.time),`<span class=tg>${ST[a.status]||'—'}</span>`,a.status==='pending'?B('attend',a.id,'تسجيل حضور','gr')+B('noshow',a.id,'تخلّف','r'):'']),q?'لا نتائج':'ابحث بالملف أو الاسم')}},
+
+queue:{n:'قائمة الانتظار',i:'people-line',r:()=>'<div class=card><h3>قائمة الانتظار (اليوم)</h3><div id=tb></div></div>',u(){
+ if(!$('tb'))return;const r=D.appointments.filter(a=>a.status==='attended'&&a.date===today()).sort((a,b)=>(a.attendedAt||'').localeCompare(b.attendedAt||''));
+ $('tb').innerHTML=T(['الدور','الملف','الطفل','الأخصائي','وقت الحضور'],r.map((a,i)=>[i+1,V(a.fileNo),V(a.childName),V(a.doctor),a.attendedAt?new Date(a.attendedAt).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}):'—']),'لا توجد حالات حاضرة')}},
+
+booking:{n:'إضافة موعد',i:'calendar-plus',r:()=>{child=null;return`<div class=card style="max-width:620px"><h3>موعد جديد</h3>${I('fno','رقم الملف')}<button class=b data-a=find>بحث</button><div id=fc style="margin:10px 0"></div>
+ <div class=g2>${S('bs','الخدمة',[])}${S('bb','الفرع',[])}${S('bd','الأخصائي',staffOpts())}${I('bdt','التاريخ','date')}${S('bt','الوقت',TIMES)}</div><button class=b data-a=book>حفظ الموعد</button></div>`},u(){fillStaff('bd');fillSel('bs',SPEC());fillSel('bb',BR())}},
+
+newfile:{n:'فتح ملف جديد',i:'folder-plus',r:()=>`<div class=card style="max-width:720px"><h3>ملف جديد</h3><div class=g2>${I('mn','اسم الأم')}${I('mp','جوال الأم (05xxxxxxxx)','tel')}${I('cn','اسم الطفل')}${I('ci','رقم هوية الطفل')}${I('cd','تاريخ الميلاد','date')}${S('cg','الجنس',O(['ذكر','أنثى']))}</div>${I('cx','التشخيص')}${S('cs','الحالة',O(['تقييم أولي جديد','مستمر في التأهيل','ما بعد جراحة عظمية']))}<label>التاريخ الطبي<textarea id=ch rows=2></textarea></label><button class=b data-a=create>حفظ وإرسال بيانات الدخول</button></div>`},
+
+doctor:{n:'بوابة الأطباء',i:'user-doctor',r:()=>'<div class=card><h3>حالاتي</h3><div id=tb></div></div>',u(){
+ if(!$('tb'))return;const r=D.appointments.filter(a=>(U.role!=='doctor'||a.doctor===U.name)&&a.status!=='completed'&&a.status!=='no_show').sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+ $('tb').innerHTML=T(['الطفل','الخدمة','الموعد','الباقة','الحالة','إجراء'],r.map(a=>[V(a.childName)+`<br><small>${V(a.fileNo)}</small>`,V(a.service),V(a.date)+' '+V(a.time),pkgTxt(a.fileNo),`<span class=tg>${ST[a.status]||'—'}</span>`,B('case',a.id,'ملف الطفل','o')+B('sess',a.id,'بدء الجلسة','gr',a.status==='attended'?'':'disabled title="لم يسجَّل حضور الطفل"')]),'لا توجد حالات')}},
+
+appr:{n:'اعتماد التقارير',i:'stamp',r:()=>`<div class=card><h3>اعتماد التقارير</h3>${B('flt','pending','بانتظار الاعتماد')}${B('flt','approved','المعتمدة','o')}<div id=tb style="margin-top:10px"></div></div>`,u(){
+ if(!$('tb'))return;const r=D.reports.filter(x=>x.status===af);
+ $('tb').innerHTML=T(['الملف','الطفل','الأخصائي','التشخيص','التطور','الملاحظات','التمارين','إجراء'],r.map(x=>[V(x.fileNo),V(x.childName),V(x.doctor),V(x.diagnosis),typeof x.progress==='number'?x.progress+'%':'—',V(x.notes),V(x.exercise),af==='pending'?B('approve',x.id,'اعتماد','gr'):'معتمد']),'لا توجد تقارير')}},
+
+att:{n:'حضور الموظفين',i:'fingerprint',r:()=>'<div class=card><h3>الحضور والانصراف - <span id=dt></span></h3><div id=tb></div></div>',u(){
+ if(!$('tb'))return;$('dt').textContent=today();
+ const m={};D.attendance.filter(a=>a.date===today()).forEach(a=>m[a.staffId]=a);
+ $('tb').innerHTML=T(['الاسم','المسمى','الحالة','دخول','خروج','إجراء'],D.staff.filter(s=>!s.archived).map(s=>{const a=m[s.id]||{};return[V(s.name),V(s.title),a.status==='left'?'انصرف':a.status==='present'?'حاضر':'لم يسجل',V(a.in),V(a.out),B('in',s.id,'حضور','gr',a.in?'disabled':'')+B('out',s.id,'انصراف','r',a.in&&!a.out?'':'disabled')]}))}},
+
+fin:{n:'الفواتير',i:'file-invoice-dollar',r:()=>`<div class=card style="max-width:620px"><h3>سند قبض</h3><div class=g2>${I('fc1','رقم الملف أو اسم الطفل')}${I('fs','الخدمة/الباقة')}${I('fa','المبلغ (ر.س)','number')}${S('fm','الدفع',O(['شبكة (مدى)','نقداً','تحويل بنكي','تمارا / تابي']))}</div><button class=b data-a=inv>حفظ السند</button></div>${['manager','accountant','it'].includes(U.role)?`<div class=card style="max-width:620px"><h3>إعدادات السند والضريبة</h3><div class=g2>${I('tvn','الرقم الضريبي (اختياري)')}${I('tvr','نسبة الضريبة % (0 إن لم يكن مسجلاً)','number')}${I('tcr','السجل التجاري (اختياري)')}</div>${B('finsave','','حفظ الإعدادات','o')}</div>`:''}<div class=card><h3>آخر السندات</h3><div id=tb></div></div>`,u(){
+ if(!$('tb'))return;if($('tvn')&&!$('tvn').dataset.i&&Object.keys(FIN).length){$('tvn').dataset.i=1;$('tvn').value=FIN.vatNo||'';$('tvr').value=FIN.vatRate??'';$('tcr').value=FIN.crNo||''}const r=[...D.invoices].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,15);
+ $('tb').innerHTML=T(['التاريخ','المراجع','الخدمة','المبلغ','الدفع','أصدره','إجراء'],r.map(x=>[V(x.date),V(x.client),V(x.service),V(x.amount),V(x.method),V(x.by),B('rprint',x.id,'PDF','gr')]))}},
+
+children:{n:'سجلات الأطفال',i:'children',r:()=>`<div class=card><h3>سجلات الأطفال (الأرشيف الطبي)</h3>${I('cq','بحث بالاسم أو رقم الملف أو الهوية أو الجوال')}<div id=tb style="margin-top:8px"></div></div>`,u(){
+ if(!$('tb'))return;const q=val('cq').toLowerCase();
+ const r=D.children.filter(c=>!c.archived).filter(c=>!q||[c.name,c.fileNo,c.idno,c.momPhone,c.momName,c.diagnosis].some(v=>String(v||'').toLowerCase().includes(q)));
+ $('tb').innerHTML=T(['الملف','الاسم','الهوية','التشخيص','ولي الأمر','التطور','إجراء'],r.map(c=>{const ok=kid(c).rp.filter(x=>x.status==='approved'),pt=ok.filter(x=>typeof x.progress==='number').sort(srtR).pop();return[V(c.fileNo),V(c.name)+(c.dob?`<br><small>${E(cAge(c.dob))}</small>`:''),V(c.idno),V(c.diagnosis),V(c.momName)+'<br><small>'+V(c.momPhone)+'</small>',pt?`<b>${pt.progress}%</b><br><small>${ok.length} جلسة</small>`:(ok.length?`<small>${ok.length} جلسة</small>`:'—'),B('cview',c.id,'الملف')+B('cprint',c.id,'PDF','gr')+B('cedit',c.id,'تعديل','o')+B('delchild',c.id,'أرشفة','r')]}),'لا توجد ملفات')}},
+
+staff:{n:'شؤون الموظفين',i:'id-card-clip',r:()=>`<div class=card><h3>شؤون الموظفين والأخصائيين</h3>${B('snew','','+ إضافة موظف')}<div style="margin-top:8px">${I('sq','بحث بالاسم أو الرقم أو الهوية أو القسم')}</div></div><div class=card><div id=tb></div></div>`,u(){
+ if(!$('tb'))return;const q=val('sq').toLowerCase(),P={};D.payroll.forEach(x=>P[x.id]=x);
+ const r=D.staff.filter(s=>!s.archived).filter(s=>!q||[s.name,s.empNo,s.phone,DL[s.dept||'doctor'],s.title,P[s.id]?.idNo].some(v=>String(v||'').toLowerCase().includes(q)));
+ $('tb').innerHTML=T(['','الرقم','الاسم','القسم','الاختصاص / المسمى','الفرع','الجوال','انتهاء الهوية','إجراء'],r.map(s=>[s.photo?`<img src="${E(s.photo)}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`:'',V(s.empNo),V(s.name),V(DL[s.dept||'doctor']),V(s.title),V(s.branch),V(s.phone),ex(P[s.id]?.idExpiry),B('sv',s.id,'ملف')+B('sedit',s.id,'تعديل','o')+B('delstaff',s.id,'حذف','r')]))}},
+specialties:{n:'الاختصاصات الطبية',i:'stethoscope',r:()=>`<div class=card style="max-width:520px"><h3>الاختصاصات / الخدمات</h3>${I('spn','اسم الاختصاص (مثال: جلسة تخاطب ونطق)')}<button class=b data-a=addspec>إضافة</button><div id=tb style="margin-top:10px"></div></div>`,u(){if(!$('tb'))return;$('tb').innerHTML=T(['الاختصاص','إجراء'],D.specialties.map(x=>[V(x.name),B('delspec',x.id,'حذف','r')]))}},
+branches:{n:'الفروع',i:'building',r:()=>`<div class=card style="max-width:520px"><h3>الفروع</h3><div class=g2>${I('brn','اسم الفرع')}${I('brc','المدينة')}</div><button class=b data-a=addbranch>إضافة</button><div id=tb style="margin-top:10px"></div></div>`,u(){if(!$('tb'))return;$('tb').innerHTML=T(['الفرع','المدينة','إجراء'],D.branches.map(x=>[V(x.name),V(x.city),B('delbranch',x.id,'حذف','r')]))}},
+hr:{n:'الموظفون والرواتب',i:'users-gear',r:()=>'<div class=kp id=kp></div><div class=card style="margin-top:12px"><h3>الموظفون والرواتب</h3><div id=tb></div></div>',u(){if(!$('tb'))return;const P={};D.payroll.forEach(x=>P[x.id]=x);
+ const L=D.staff.filter(x=>!x.archived),tot=x=>['salary','housing','transport','other'].reduce((t,k)=>t+(+(P[x.id]?.[k])||0),0),soon=x=>['idExpiry','ppExpiry','licExpiry','contractEnd'].some(k=>{const d=P[x.id]?.[k];return d&&(new Date(d)-new Date(today()))/864e5<=60});
+ $('kp').innerHTML=`<div class=card><small>إجمالي الرواتب الشهرية</small><h2>${L.reduce((t,x)=>t+tot(x),0).toLocaleString('en')}</h2></div><div class=card><small>عدد الموظفين</small><h2>${L.length}</h2></div><div class=card><small>وثائق منتهية أو قاربت (60 يوماً)</small><h2>${L.filter(soon).length}</h2></div>`;
+ $('tb').innerHTML=T(['الرقم','الاسم','القسم','الاختصاص','الفرع','الجوال','الراتب الإجمالي','انتهاء الهوية','إجراء'],L.map(x=>[V(x.empNo),V(x.name),V(DL[x.dept||'doctor']),V(x.title),V(x.branch),V(x.phone),P[x.id]?V(tot(x)):'—',ex(P[x.id]?.idExpiry),B('sv',x.id,'ملف')+B('sal',x.id,'تعديل الراتب')]))}},
+acc:{n:'الحسابات والتقارير المالية',i:'coins',r:()=>'<div class=kp id=kp></div><div class=card style="margin-top:12px"><h3>آخر السندات</h3><div id=tb></div></div>',u(){if(!$('tb'))return;const iv=D.invoices,sm=a=>a.reduce((t,x)=>t+(+x.amount||0),0),t=today(),by={};
+ iv.forEach(x=>{const k=x.method||'—';by[k]=(by[k]||0)+(+x.amount||0)});
+ $('kp').innerHTML=[['إجمالي اليوم',sm(iv.filter(x=>x.date===t))],['إجمالي الشهر',sm(iv.filter(x=>(x.date||'').startsWith(t.slice(0,7))))],['الإجمالي الكلي',sm(iv)],...Object.entries(by)].map(([a,b])=>`<div class=card><small>${E(a)}</small><h2>${b.toLocaleString('en')}</h2></div>`).join('');
+ $('tb').innerHTML=T(['التاريخ','المراجع','الخدمة','المبلغ','الدفع','أصدره'],[...iv].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,30).map(x=>[V(x.date),V(x.client),V(x.service),V(x.amount),V(x.method),V(x.by)]))}},
+store:{n:'المخزون',i:'boxes-stacked',r:()=>`<div class=card style="max-width:720px"><h3>صنف جديد</h3><div class=g2>${I('in1','اسم الصنف')}${I('in2','الكمية','number')}${I('in3','حد التنبيه','number')}${I('in4','الوحدة (علبة، قطعة...)')}</div><button class=b data-a=additem>إضافة</button></div><div class=card><div id=tb></div></div>`,u(){if(!$('tb'))return;
+ $('tb').innerHTML=T(['الصنف','الكمية','الوحدة','الحالة','إجراء'],D.inventory.map(x=>{const low=(+x.qty||0)<=(+x.min||0);return[V(x.name),V(x.qty),V(x.unit),low?'<span class=tg style="color:#e11d48">منخفض</span>':'<span class=tg>جيد</span>',B('qplus',x.id,'+','gr')+B('qminus',x.id,'−','o')+B('delitem',x.id,'حذف','r')]}))}},
+crm:{n:'خدمة العملاء',i:'headset',r:()=>`<div class=card style="max-width:720px"><h3>استفسار / عميل محتمل</h3><div class=g2>${I('qn','الاسم')}${I('qph','الجوال','tel')}</div><label>الملاحظة<textarea id=qt rows=2></textarea></label><button class=b data-a=addinq>تسجيل</button></div><div class=card><div id=tb></div></div>`,u(){if(!$('tb'))return;const L={new:'جديد',follow:'متابعة',closed:'مغلق'};
+ $('tb').innerHTML=T(['التاريخ','الاسم','الجوال','الملاحظة','الحالة','إجراء'],[...D.inquiries].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).map(x=>[V(x.date),V(x.name),V(x.phone),V(x.note),`<span class=tg>${L[x.status]||'—'}</span>`,B('inqf',x.id,'متابعة')+B('inqc',x.id,'إغلاق','gr')+B('delinq',x.id,'حذف','r')]))}},
+pkgs:{n:'الباقات والأسعار',i:'tags',r:()=>`<div class=card style="max-width:620px"><h3>باقة جديدة</h3><div class=g2>${I('pn','اسم الباقة')}${I('pc','عدد الجلسات','number')}${I('pp','السعر (ر.س)','number')}${S('ps','الخدمة',[])}</div><button class=b data-a=addpkg>إضافة</button></div><div class=card><div id=tb></div></div>`,u(){fillSel('ps',SPEC());if(!$('tb'))return;$('tb').innerHTML=T(['الباقة','الخدمة','الجلسات','السعر','سعر الجلسة','إجراء'],D.packages.map(x=>[V(x.name),V(x.service),V(x.sessions),V(x.price),V(x.sessions?(x.price/x.sessions).toFixed(1):''),B('delpkg',x.id,'حذف','r')]))}},
+subs:{n:'الاشتراك في الباقات',i:'ticket',r:()=>{child=null;return`<div class=card style="max-width:620px"><h3>اشتراك جديد</h3>${I('sfno','رقم الملف')}<button class=b data-a=sfind>بحث</button><div id=sfc style="margin:10px 0"></div>${S('spk','الباقة',[])}${S('spm','طريقة الدفع',O(['شبكة (مدى)','نقداً','تحويل بنكي','تمارا / تابي']))}<button class=b data-a=subscribe>اشتراك وإصدار سند</button></div><div class=card><h3>الاشتراكات</h3><div id=tb></div></div>`},u(){const e=$('spk');if(e){const a=D.packages.map(x=>[x.id,`${x.name} — ${x.sessions} جلسة — ${x.price} ر.س`]);if(e.options.length!==a.length)e.innerHTML=a.map(o=>`<option value="${E(o[0])}">${E(o[1])}</option>`).join('')}
+ if(!$('tb'))return;$('tb').innerHTML=T(['الملف','الطفل','الباقة','الجلسات','المتبقي','الحالة'],[...D.subscriptions].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).map(x=>[V(x.fileNo),V(x.childName),V(x.packageName),`${x.used}/${x.total}`,x.total-x.used,`<span class=tg>${x.status==='active'?'فعّال':'منتهي'}</span>`]))}},
+msgs:{n:'المراسلات',i:'envelope',r:()=>`<div class=card style="max-width:640px"><h3>رسالة جديدة</h3>${S('mto','إلى',[['reception','الاستقبال'],['manager','المدير'],['it','قسم IT'],['accountant','المحاسبة'],['hr','الموارد البشرية'],['store','المخزون'],['service','خدمة العملاء'],['doctor','الأطباء']])}${I('msub','الموضوع')}<label>الرسالة<textarea id=mbody rows=3></textarea></label><small>المرسل يُحدَّد تلقائياً من حسابك.</small><br><button class=b data-a=sendmsg>إرسال</button></div><div class=card>${B('mtab','in','الوارد')}${B('mtab','out','المرسل','o')}<div id=tb style="margin-top:10px"></div></div>`,u(){if(!$('tb'))return;const inb=mtab==='in',tm=x=>V((x.createdAt||'').slice(0,16).replace('T',' '));
+ const r=D.messages.filter(x=>inb?x.toRole===U.role:x.fromUid===U.uid).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+ $('tb').innerHTML=T(inb?['من','الموضوع','الرسالة','التاريخ','إجراء']:['إلى','الموضوع','الرسالة','التاريخ','الحالة'],r.map(x=>inb?[`${V(x.fromName)} <small>(${E(RL[x.fromRole]||'')})</small>`,V(x.subject),V(x.body),tm(x),x.read?'مقروءة':B('rd',x.id,'تم الاطلاع','gr')]:[V(RL[x.toRole]),V(x.subject),V(x.body),tm(x),x.read?'قُرئت':'لم تُقرأ']),'لا توجد رسائل')}},
+logs:{n:'سجل العمليات',i:'clock-rotate-left',r:()=>`<div class=card><h3>سجل العمليات</h3>${U.role==='it'?`<div style="margin-bottom:8px">${B('clrlogs','','تصفير السجل (IT)','r')} <small style="color:var(--g)">عمليات الـ IT لا تُسجَّل في هذا السجل.</small></div>`:''}<div class=g2>${I('lq','بحث (الاسم، العملية، الطفل)')}${S('lf','الدور',[['','الكل'],...Object.entries(RL)])}</div><div id=tb></div></div>`,u(){if(!$('tb'))return;const q=val('lq').toLowerCase(),f=val('lf');
+ const r=D.activity_logs.filter(x=>(!f||x.byRole===f)&&(!q||[x.byName,x.action,x.details,x.screen].some(v=>String(v||'').toLowerCase().includes(q)))).slice(0,300);
+ $('tb').innerHTML=T(['التاريخ','المستخدم','الدور','العملية','التفاصيل','الشاشة'],r.map(x=>[V(fdt(x.createdAt)),V(x.byName),V(RL[x.byRole]),V(x.action),V(x.details),V(x.screen)]),'لا توجد عمليات')}},
+archive:{n:'الأرشيف',i:'box-archive',r:()=>`<div class=card><h3>الأرشيف</h3><div class=g2>${S('ak','السجل',Object.entries(ARC).map(([k,v])=>[k,v.n]))}${I('aq','بحث')}</div><small id=ah style="color:var(--g);display:block;margin-top:6px"></small><div id=tb></div></div>`,u(){if(!$('tb'))return;const k=$('ak').value;$('ah').textContent=FULLC.has(k)?'تعرض هذه القائمة السجلات الحديثة فقط (المواعيد 60 يوماً، التقارير 365 يوماً، الحضور 45 يوماً). الأقدم محفوظ في قاعدة البيانات ويمكن تصديره من تصدير واستيراد البيانات.':'';const c=ARC[k],q=val('aq').toLowerCase(),can=U.role==='manager'||U.role==='it',rs=c.rs&&can;
+ const r=(D[k]||[]).filter(x=>c.f(x)).filter(x=>!q||c.c.some(([,f])=>String(x[f]||'').toLowerCase().includes(q)));
+ $('tb').innerHTML=T([...c.c.map(y=>y[0]),...(rs?['إجراء']:[])],r.map(x=>[...c.c.map(([,f])=>V(f==='status'?(ST[x[f]]||x[f]):x[f])),...(rs?[B('restore',k+':'+x.id,'استعادة','gr')]:[])]),'لا توجد سجلات')}},
+backup:{n:'النسخ الاحتياطي',i:'database',r:()=>`<div class=card style="max-width:560px"><h3>نسخة احتياطية كاملة</h3><p style="margin-bottom:10px;color:var(--g)">تنزّل ملف JSON فيه كل بيانات النظام (الأطفال، المواعيد، الموظفون، الرواتب، السندات، الاشتراكات، السجلات...). احتفظ به في مكان آمن لأنه يحوي بيانات طبية.</p><button class=b data-a=backup>تنزيل نسخة احتياطية الآن</button><p id=bk class=mu style="margin-top:10px"></p></div>`,u(){const e=$('bk');if(e)e.textContent='آخر نسخة من هذا الجهاز: '+(ls('khatwa_bk')||'لا توجد')}},
+parents:{n:'حسابات أولياء الأمور',i:'key',r:()=>`<div class=card><h3>حسابات تطبيق أولياء الأمور</h3><small style="color:var(--g)">يُنشأ الحساب تلقائياً عند فتح ملف طفل لولي أمر جديد (كلمة المرور الافتراضية: رقم الجوال).</small><div style="margin-top:8px">${I('pq','بحث بالاسم أو الجوال أو اسم المستخدم أو اسم الطفل أو رقم الملف')}</div><div id=tb></div></div>`,u(){
+ if(!$('tb'))return;const q=val('pq').toLowerCase(),kids=u=>D.children.filter(c=>u&&c.parentUid===u);
+ const r=[...D.moms_users].sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||''))).filter(x=>!q||[x.momName,x.phone,x.username,...kids(x.uid).flatMap(c=>[c.name,c.fileNo])].some(v=>String(v||'').toLowerCase().includes(q)));
+ $('tb').innerHTML=T(['ولي الأمر','الجوال','اسم المستخدم','الأطفال','إجراء'],r.map(x=>[V(x.momName),V(x.phone),`<b dir=ltr>${V(x.username)}</b>`,V(kids(x.uid).map(c=>c.name+' ('+(c.fileNo||'')+')').join('، ')),B('pe',x.id,'تعديل')]),'لا توجد حسابات')}},
+susers:{n:'مستخدمو النظام',i:'users-gear',r:()=>`<div class=card><h3>إضافة مستخدم</h3><datalist id=stl>${D.staff.filter(x=>!x.archived).map(x=>`<option value="${E(x.name)}">`).join('')}</datalist><label>ابحث عن موظف وأضفه كمستخدم<input id=sq2 placeholder="اكتب جزءاً من الاسم أو الرقم الوظيفي"></label><div id=sl class=card style="max-height:190px;overflow:auto;padding:6px"></div><div class=g2><label>الاسم (يُملأ تلقائياً عند اختيار موظف)<input id=sn list=stl></label>${I('su','اسم المستخدم (إنجليزي)')}${I('sp','كلمة المرور')}${S('sr','الدور',[['manager','مدير'],['doctor','طبيب'],['reception','استقبال'],['accountant','محاسب'],['hr','موارد بشرية'],['store','مخزون'],['service','خدمة عملاء'],['it','IT']])}</div>${B('sgen','','توليد كلمة مرور','o')}${B('sclear','','مسح الاختيار','o')}${B('mkuser','','إنشاء المستخدم','gr')}</div><div class=card><h3>المستخدمون</h3>${I('uq','بحث')}<div id=tb></div></div>`,u(){
+ if(!$('tb'))return;const q=val('uq').toLowerCase();
+ const lq=val('sq2').toLowerCase(),has=s=>D.users.some(u=>u.role!=='parent'&&(u.staffId===s.id||u.name===s.name));
+ if($('sl'))$('sl').innerHTML=D.staff.filter(s=>!s.archived&&!has(s)&&(!lq||[s.name,s.empNo].some(v=>String(v||'').toLowerCase().includes(lq)))).slice(0,50).map(s=>B('spick',s.id,E(s.name)+' — '+E(DL[s.dept||'doctor']),'o','style="display:block;width:100%;text-align:right"')).join('')||'<span class=mu>لا يوجد موظف بدون حساب</span>';
+ const r=D.users.filter(x=>x.role&&x.role!=='parent').filter(x=>!q||[x.name,x.username,TT[x.role]].some(v=>String(v||'').toLowerCase().includes(q)));
+ $('tb').innerHTML=T(['الاسم','اسم المستخدم','الدور','الحالة','إجراء'],r.map(x=>[V(x.name),`<b dir=ltr>${V(x.username)}</b>`,V(TT[x.role]||x.role),x.disabled?'<span class=tg style="color:#e11d48">موقوف</span>':'<span class=tg style="color:#16a34a">فعّال</span>',B('ue',x.id,'تعديل')+B('utog',x.id,x.disabled?'تفعيل':'إيقاف',x.disabled?'gr':'r')]),'لا يوجد مستخدمون')}},
+dataio:{n:'تصدير واستيراد البيانات',i:'file-export',r:()=>`<div class=card><h3>تصدير واستيراد البيانات (Excel)</h3><small style="color:var(--g);line-height:1.8;display:block">كل قائمة بيانات دائمة في النظام يمكن تصديرها إلى ملف Excel تحفظه على جهازك، واستيرادها لاحقاً لاسترجاعها إذا تغيّرت قاعدة البيانات أو تحدّث النظام. الاستيراد يضيف السجلات الجديدة ويحدّث الموجودة ولا يحذف شيئاً. المواعيد غير مشمولة.</small><div style="margin-top:10px">${B('xall','','تصدير كل البيانات في ملف واحد','gr')}${['manager','it'].includes(U.role)?B('ximp','*','استيراد ملف Excel','o'):''}</div></div><div id=tb></div>`,u(){if(!$('tb'))return;$('tb').innerHTML=DS.map(d=>xbox(d.k,d.s.some(([c])=>FULLC.has(c))?null:d.s.reduce((t,[c])=>t+(D[c]||[]).filter(d.f?.[c]||(()=>true)).length,0))).join('')}},
+remind:{n:'تذكير المواعيد',i:'bell',r:()=>`<div class=card><h3>تذكير أولياء الأمور بالمواعيد</h3><div class=g2>${S('rd','مواعيد يوم',[0,1,2,3].map(n=>[dayStr(n),['اليوم','غداً','بعد غد','بعد 3 أيام'][n]+' ('+dayStr(n)+')']))}</div><label>نص الرسالة (يمكن تعديله)<textarea id=rt rows=4></textarea></label><small style="color:var(--g);display:block">المتغيرات: {ولي الأمر} {الطفل} {التاريخ} {الوقت} {الأخصائي} {الفرع} {الخدمة}</small>${B('rtsave','','حفظ النص','o')}<div id=tb style="margin-top:10px"></div></div>`,u(){
+ if(!$('tb'))return;if(!$('rd').dataset.i){$('rd').dataset.i=1;$('rd').value=dayStr(1)}if(!$('rt').dataset.i){$('rt').dataset.i=1;$('rt').value=REM||DEFT}
+ const d=val('rd'),r=D.appointments.filter(a=>a.date===d&&a.status==='pending').sort((a,b)=>String(a.time).localeCompare(String(b.time))),done=r.filter(a=>a.reminded).length;
+ $('tb').innerHTML=`<p class=mu>${r.length} موعد، تم تذكير ${done}</p>`+T(['الوقت','الطفل','ولي الأمر','الأخصائي','الفرع','التذكير','إجراء'],r.map(a=>{const c=D.children.find(x=>x.fileNo===a.fileNo),ph=c?.momPhone;return[V(a.time),V(a.childName)+`<br><small>${V(a.fileNo)}</small>`,V(c?.momName)+`<br><small>${V(ph)}</small>`,V(a.doctor),V(a.branch),a.reminded?`<span class=tg style="color:#16a34a">✓ ${E(a.remindedBy||'')}</span>`:'—',ph?B('rsend',a.id,a.reminded?'إعادة الإرسال':'إرسال واتساب','gr'):'لا يوجد جوال']}),'لا توجد مواعيد بانتظار الحضور في هذا اليوم')}},
+kpi:{n:'مؤشرات الأداء',i:'chart-line',r:()=>'<div class=kp id=kp></div><div class=card style="margin-top:12px"><h3>الإيراد الشهري (آخر 6 أشهر)</h3><div id=kb></div></div><div class=card><h3>أداء الأخصائيين (آخر 60 يوماً)</h3><div id=tb></div></div>',u(){
+ if(!$('tb'))return;const mk=n=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-n);return d.toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'}).slice(0,7)};
+ const rev={};D.invoices.forEach(x=>{const m=String(x.date||'').slice(0,7);rev[m]=(rev[m]||0)+(+x.amount||0)});
+ const ms=[5,4,3,2,1,0].map(mk),mx=Math.max(1,...ms.map(m=>rev[m]||0));
+ const ap=D.appointments.filter(a=>a.date<=today()),att=a=>a.status==='completed'||a.status==='attended',ns=ap.filter(a=>a.status==='no_show').length,tot=ap.filter(a=>att(a)||a.status==='no_show').length;
+ const rp=D.reports.filter(r=>r.status==='approved'&&typeof r.progress==='number'),by={};rp.forEach(r=>{const k=r.fileNo||r.childName;(by[k]=by[k]||[]).push(r)});
+ const gains=Object.values(by).filter(a=>a.length>1).map(a=>{a.sort(srtR);return a[a.length-1].progress-a[0].progress}),avg=gains.length?Math.round(gains.reduce((t,x)=>t+x,0)/gains.length):null;
+ $('kp').innerHTML=[['إيراد هذا الشهر',(rev[ms[5]]||0).toLocaleString('en')],['إيراد الشهر الماضي',(rev[ms[4]]||0).toLocaleString('en')],['نسبة التخلف عن المواعيد',tot?Math.round(ns*100/tot)+'%':'—'],['متوسط تحسّن الأطفال',avg!==null?(avg>=0?'+':'')+avg+' نقطة':'—']].map(([a,b])=>`<div class=card><small>${a}</small><h2>${b}</h2></div>`).join('');
+ $('kb').innerHTML=ms.map(m=>`<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><small style="width:62px">${m}</small><div style="flex:1;background:var(--l);border-radius:8px;overflow:hidden"><i style="display:block;height:18px;width:${(rev[m]||0)*100/mx}%;background:#0369a1"></i></div><b style="min-width:70px;text-align:left">${(rev[m]||0).toLocaleString('en')}</b></div>`).join('');
+ const docs=[...new Set(ap.map(a=>a.doctor).filter(Boolean))].sort();
+ $('tb').innerHTML=T(['الأخصائي','حضر / أُكملت','تخلّف','نسبة التخلف','متوسط نسبة التطور'],docs.map(d=>{const mine=ap.filter(a=>a.doctor===d),a1=mine.filter(att).length,n1=mine.filter(a=>a.status==='no_show').length,pr=rp.filter(r=>r.doctor===d);return[V(d),a1,n1,(a1+n1)?Math.round(n1*100/(a1+n1))+'%':'—',pr.length?Math.round(pr.reduce((t,r)=>t+r.progress,0)/pr.length)+'%':'—']}),'لا توجد مواعيد')}},
+myschedule:{n:'جدولي',i:'calendar-days',r:()=>'<div id=lv></div><div id=tb></div>',u(){if(!$('tb'))return;
+ const t=today(),tm=new Date(Date.now()+864e5).toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'}),dn=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+ const mine=D.appointments.filter(a=>(U.role!=='doctor'||a.doctor===U.name)&&(a.date||a.day)>=t&&a.status!=='no_show').sort((a,b)=>((a.date||a.day)+t24(a.time)).localeCompare((b.date||b.day)+t24(b.time)));
+ const g={};mine.forEach(a=>{const d=a.date||a.day;(g[d]=g[d]||[]).push(a)});
+ const lv=D.leaves.filter(x=>x.status==='approved'&&(x.to||x.from)>=t);
+ $('lv').innerHTML=lv.length?`<div class=card style="border-color:#16a34a"><b>إجازات واستئذانات معتمدة قادمة</b><br>${lv.map(x=>`${E(x.type)}: ${V(x.from)}${x.to&&x.to!==x.from?' إلى '+V(x.to):''}`).join('<br>')}</div>`:'';
+ const days=Object.keys(g);
+ $('tb').innerHTML=days.length?days.map(d=>{const lab=d===t?'اليوم':d===tm?'غداً':dn[new Date(d+'T00:00:00').getDay()];return`<div class=card><h3>${lab} — ${V(d)} <small style="color:var(--g)">(${g[d].length} موعد)</small></h3>${T(['الوقت','الطفل','الملف','الخدمة','الحالة'],g[d].map(a=>[V(a.time),V(a.childName),V(a.fileNo),V(a.service),`<span class=tg>${ST[a.status]||'—'}</span>`]))}</div>`}).join(''):'<div class="card mu">لا توجد مواعيد قادمة في جدولك</div>'}},
+leave:{n:'طلب استئذان',i:'door-open',r:()=>`<div class=card style="max-width:620px"><h3>طلب استئذان / إجازة</h3><div class=g2>${S('lt','النوع',O(['استئذان (ساعات)','إجازة (يوم أو أكثر)']))}${I('lf','من تاريخ','date')}${I('lto','إلى تاريخ (للإجازة)','date')}${I('lh1','من الساعة','time')}${I('lh2','إلى الساعة','time')}</div><label>السبب<textarea id=lr rows=2></textarea></label><button class=b data-a=sendleave>إرسال للمدير</button></div><div class=card><h3>طلباتي</h3><div id=tb></div></div>`,u(){if(!$('tb'))return;
+ const r=D.leaves.filter(x=>x.uid===U.uid).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+ $('tb').innerHTML=T(['النوع','من','إلى','الساعات','السبب','الحالة'],r.map(x=>[V(x.type),V(x.from),V(x.to),V(x.h1?x.h1+' – '+x.h2:''),V(x.reason),`<span class=tg>${LST[x.status]||'—'}</span>`]),'لا توجد طلبات')}},
+leaveadm:{n:'طلبات الاستئذان',i:'clipboard-check',r:()=>'<div class=card><h3>طلبات الاستئذان والإجازات</h3><div id=tb></div></div>',u(){if(!$('tb'))return;
+ const r=[...D.leaves].sort((a,b)=>(a.status==='pending'?0:1)-(b.status==='pending'?0:1)||(b.createdAt||'').localeCompare(a.createdAt||''));
+ $('tb').innerHTML=T(['الموظف','الدور','النوع','من','إلى','الساعات','السبب','مواعيد متأثرة','الحالة','إجراء'],r.map(x=>{const hit=D.appointments.filter(a=>a.doctor===x.name&&(a.date||a.day)>=x.from&&(a.date||a.day)<=x.to&&a.status!=='no_show').length;
+  return[V(x.name),V(RL[x.role]),V(x.type),V(x.from),V(x.to),V(x.h1?x.h1+' – '+x.h2:''),V(x.reason),hit?`<b style="color:#e11d48">${hit}</b>`:'—',`<span class=tg>${LST[x.status]||'—'}</span>`,x.status==='pending'?B('lvok',x.id,'موافقة','gr')+B('lvno',x.id,'رفض','r'):V(x.decidedBy)]}),'لا توجد طلبات')}},
+notify:{n:'إرسال إشعار',i:'bullhorn',r:()=>`<div class=card style="max-width:620px"><h3>إشعار جديد</h3>${S('nt','إلى',[['all','الجميع'],['doctor','الأطباء'],['reception','الاستقبال'],['manager','المدير'],['accountant','المحاسبة'],['hr','الموارد البشرية'],['store','المخزون'],['service','خدمة العملاء'],['it','IT']])}${I('ntt','العنوان')}<label>النص<textarea id=ntb rows=3></textarea></label><button class=b data-a=sendnotif>إرسال</button></div>`},
+perm:{n:'الصلاحيات (IT)',i:'shield-halved',r:()=>`<div class=card style="max-width:700px"><h3>صلاحيات الأقسام</h3>${S('pr','القسم',[['manager','المدير'],['doctor','الأطباء'],['reception','الاستقبال'],['accountant','المحاسبة'],['hr','الموارد البشرية'],['store','المخزون'],['service','خدمة العملاء']])}<div id=pc class=g2></div><button class=b data-a=saveP>حفظ سحابياً</button></div>
+ <div class=card style="max-width:700px"><h3>ربط حساب بدور</h3><small>أنشئ المستخدم في Firebase Authentication ثم انسخ UID هنا.</small><div class=g2 style="margin-top:8px">${I('uu','UID')}${I('un','الاسم (يطابق اسم الأخصائي للأطباء)')}${S('ur','الدور',[['manager','مدير'],['doctor','طبيب'],['reception','استقبال'],['accountant','محاسب'],['hr','موارد بشرية'],['store','مخزون'],['service','خدمة عملاء'],['it','IT']])}</div><button class=b data-a=saveU>حفظ</button></div>`,u(){
+ if(!$('pc')||$('pc').dataset.r===$('pr').value)return;const r=$('pr').value;$('pc').dataset.r=r;const p=({...DEF,...PERM})[r]||[];
+ $('pc').innerHTML=Object.keys(SC).filter(k=>k!=='perm').map(k=>`<label><input type=checkbox style="width:auto" value="${k}" ${p.includes(k)?'checked':''}> ${SC[k].n}</label>`).join('')}}
+};
+
+/* ---------- تنقل ---------- */
+const NEW={doctor:['leave'],accountant:['leave'],hr:['leave'],store:['leave'],service:['leave'],reception:['leave'],manager:['leaveadm','notify']};
+const allowed=()=>U.role==='it'?Object.keys(SC):[...new Set([...(U.role==='doctor'?['myschedule']:[]),...(({...DEF,...PERM})[U.role]||[]),...(NEW[U.role]||[])])].filter(k=>SC[k]&&k!=='perm');
+function nav(){$('nav').innerHTML=allowed().map(k=>`<button class="nav ${k===cur?'on':''}" data-a=go data-id=${k}><i class="fa-solid fa-${SC[k].i}"></i>${SC[k].n}${k==='msgs'&&unread()?` (${unread()})`:''}</button>`).join('')}
+function go(id){if(!allowed().includes(id))return;cur=id;$('scr').innerHTML=SC[id].r();if(SCDS[id])$('scr').insertAdjacentHTML('afterbegin',xbox(SCDS[id]));SC[id].u?.();nav();$('side').classList.remove('open');scrollTo(0,0)}
+function listen(){unsubs.forEach(f=>f());
+ const doc_=U.role==='doctor';
+ unsubs=Object.keys(D).filter(k=>k!=='messages'&&(k!=='activity_logs'||U.role==='manager'||U.role==='it')&&(!doc_||k==='appointments'||k==='staff'||k==='subscriptions'||k==='leaves'||k==='staff_cards')).map(k=>{const ref=collection(db,k);
+  if(k==='reports'){const a={w:[],p:[]},mg=()=>{const m=new Map();[...a.w,...a.p].forEach(x=>m.set(x.id,x));D.reports=[...m.values()];SC[cur]?.u?.()},f=(q,key)=>onSnapshot(q,s=>{a[key]=s.docs.map(d=>({id:d.id,...d.data()}));mg()},e=>console.warn('reports',e.code)),u1=f(query(ref,where('date','>=',since(WIN.reports))),'w'),u2=f(query(ref,where('status','==','pending')),'p');return()=>{u1();u2()}}
+  const src=doc_&&k==='appointments'?query(ref,where('doctor','==',U.name)):k==='appointments'?query(ref,where('date','>=',since(WIN.appointments))):k==='attendance'?query(ref,where('date','>=',since(WIN.attendance))):k==='activity_logs'?query(ref,orderBy('createdAt','desc'),limit(500)):k==='leaves'&&U.role!=='manager'&&U.role!=='it'?query(ref,where('uid','==',U.uid)):k==='staff_cards'&&!['manager','it','hr'].includes(U.role)?query(ref,where('name','==',U.name)):ref;
+  return onSnapshot(src,s=>{D[k]=s.docs.map(d=>({id:d.id,...d.data()}));SC[cur]?.u?.()},e=>console.warn(k,e.code))});
+ unsubs.push(onSnapshot(doc(db,'settings','role_permissions'),s=>{PERM=s.exists()?s.data():null;nav();if(!allowed().includes(cur))go(allowed()[0])},()=>{}));
+ unsubs.push(onSnapshot(doc(db,'settings','finance'),s=>{FIN=s.exists()?s.data():{};SC[cur]?.u?.()},()=>{}),onSnapshot(doc(db,'settings','reminder'),s=>{REM=s.exists()?s.data().text:null},()=>{}));
+ unsubs.push(onSnapshot(doc(db,'settings','hospital'),x=>{HOSP=x.exists()?x.data():{};drawCard()},()=>{}));
+ const nn={u:[],r:[],a:[]},ng=()=>{const m=new Map();[...nn.u,...nn.r,...nn.a].forEach(x=>m.set(x.id,x));NS.list=[...m.values()].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));notifRender()},
+  nq=(q,k)=>{let first=true;return onSnapshot(q,s=>{nn[k]=s.docs.map(d=>({id:d.id,...d.data()}));if(!first)s.docChanges().forEach(c=>{const x=c.doc.data();if(c.type==='added'&&Date.parse(x.createdAt)>NS.seen&&x.by!==U.name)toast('🔔 '+x.title,1)});first=false;ng()},e=>console.warn('notif',e.code))};
+ NS.key='khatwa_nseen_'+U.uid;if(ls(NS.key)==null)ls(NS.key,String(Date.now()));NS.seen=+ls(NS.key)||0;
+ unsubs.push(nq(query(collection(db,'notifications'),where('toUid','==',U.uid)),'u'),nq(query(collection(db,'notifications'),where('toRole','==',U.role)),'r'),nq(query(collection(db,'notifications'),where('toRole','==','all')),'a'));
+ const mm={to:[],from:[]},mg=()=>{const m=new Map();[...mm.to,...mm.from].forEach(x=>m.set(x.id,x));D.messages=[...m.values()];nav();SC[cur]?.u?.()},mq=(f,v,k)=>onSnapshot(query(collection(db,'messages'),where(f,'==',v)),q=>{mm[k]=q.docs.map(d=>({id:d.id,...d.data()}));mg()},e=>console.warn('messages',e.code));
+ unsubs.push(mq('toRole',U.role,'to'),mq('fromUid',U.uid,'from'))}
+
+onAuthStateChanged(auth,async u=>{
+ if(!u){unsubs.forEach(f=>f());unsubs=[];$('app').classList.add('hidden');$('login').classList.remove('hidden');showLogin();return}
+ try{const s=await getDoc(doc(db,'users',u.uid));
+  if(!s.exists()){const id=u.uid;await signOut(auth);lerr('هذا الحساب بلا دور في قاعدة البيانات. أعطِ هذا الـ UID للـ IT: '+id);return}
+  if(s.data().disabled){await signOut(auth);lerr('هذا الحساب موقوف. تواصل مع مسؤول النظام');return}
+  Object.assign(U,{uid:u.uid,...s.data()});
+  if(!PORTAL[U.role]){const r=U.role;await signOut(auth);lerr(r==='parent'?'هذا حساب ولي أمر وليس حساب موظف.':'الدور غير معروف في النظام: '+(r===undefined?'(فارغ)':r));return}
+ }catch(e){lerr('تعذر قراءة الصلاحيات: '+(e.code||e.message)+' — راجع قواعد Firestore');toast('تعذر قراءة الصلاحيات: '+e.code,0);return signOut(auth)}
+ $('who').textContent=U.name||u.email;if(ls('khatwa_rm')!=='0')ls('khatwa_last',JSON.stringify({email:u.email,name:U.name,role:U.role}));else ls('khatwa_last','');$('ht').textContent='أهلاً بك في '+PORTAL[U.role];$('hn').textContent=U.name;try{if(!sessionStorage.getItem('khatwa_lg')){sessionStorage.setItem('khatwa_lg','1');logAct('تسجيل دخول','')}}catch{}$('rl').textContent={manager:'المدير',doctor:'طبيب',reception:'استقبال',it:'IT',accountant:'محاسب',hr:'موارد بشرية',store:'مخزون',service:'خدمة عملاء'}[U.role]||'';
+ $('login').classList.add('hidden');$('app').classList.remove('hidden');listen();go(allowed()[0]||'home')});
+
+/* ---------- الإجراءات (تفويض الأحداث بدل onclick المضمّن) ---------- */
+const sub=(c,id,d)=>run(updateDoc(doc(db,c,id),d),'تم');
+const A={
+ login(){let l=null;try{l=JSON.parse(ls('khatwa_last')||'null')}catch{}ls('khatwa_rm',$('rm').checked?'1':'0');if(!l&&!val('em'))return lerr('اكتب اسم المستخدم');if(!$('pw').value)return lerr('اكتب كلمة المرور');
+  lerr('');const b=$('lbtn');b.disabled=true;b.firstElementChild.textContent='جارٍ الدخول...';
+  run(signInWithEmailAndPassword(auth,l?l.email:uname(val('em')),$('pw').value)).then(ok=>{if(!ok){lerr('اسم المستخدم أو كلمة المرور غير صحيحة');b.disabled=false;b.firstElementChild.textContent='تسجيل الدخول'}})},
+ forgot(){toast('لإعادة تعيين كلمة المرور تواصل مع مسؤول النظام (IT)',1)},
+ swu(){ls('khatwa_last','');showLogin();$('em').focus()},
+ eye(){const p=$('pw'),h=p.type==='password';p.type=h?'text':'password';document.querySelector('.eye i').className='fa-solid fa-eye'+(h?'-slash':'')},
+ async logout(){await logAct('تسجيل خروج','');try{sessionStorage.removeItem('khatwa_lg')}catch{}signOut(auth)},menu(){$('side').classList.toggle('open')},go,
+ attend:id=>sub('appointments',id,{status:'attended',attendedAt:new Date().toISOString()}),
+ noshow(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;run((async()=>{const b=writeBatch(db);b.update(doc(db,'appointments',id),{status:'no_show'});if(a.slot)b.delete(doc(db,'slots',slotKey(a.doctor,a.date,a.time)));if(a.cslot)childKeys(a.fileNo,a.date,a.time,a.service).forEach(k=>b.delete(doc(db,'slots',k)));await b.commit()})(),'تم تسجيل التخلّف')},
+ find(){const f=val('fno').toLowerCase();child=D.children.find(c=>String(c.fileNo||'').toLowerCase()===f)||null;
+  $('fc').innerHTML=child?`<div class=card><b>${E(child.name)}</b><br><small>التشخيص: ${V(child.diagnosis)} | ولي الأمر: ${V(child.momName)}</small></div>`:'';if(!child)toast('لا يوجد طفل بهذا الرقم',0)},
+ async book(){const doctor=val('bd'),date=val('bdt'),time=val('bt');
+  if(!child)return toast('اجلب بيانات الطفل أولاً',0);if(!doctor||!date)return toast('اختر الأخصائي والتاريخ',0);
+  if(date<today())return toast('لا يمكن الحجز بتاريخ سابق',0);
+  if(D.appointments.some(a=>a.doctor===doctor&&a.date===date&&a.time===time&&a.status!=='no_show'))return toast('الأخصائي محجوز في هذا الوقت',0);
+  if(D.off_days.some(o=>o.doctor===doctor&&o.date===date))return toast('الأخصائي في إجازة في هذا التاريخ',0);
+  const act=D.appointments.filter(a=>a.fileNo===child.fileNo&&(a.date||a.day)===date&&a.status!=='no_show');
+  if(act.some(a=>t24(a.time)===t24(time)))return toast('للطفل موعد آخر في نفس الوقت',0);
+  if(act.some(a=>svcKey(a.service)===svcKey(val('bs'))))return toast('للطفل موعد في نفس التخصص في هذا اليوم',0);
+  const ref=doc(collection(db,'appointments')),sk=slotKey(doctor,date,time),now=new Date().toISOString();
+  if(await run((async()=>{const b=writeBatch(db);
+   b.set(doc(db,'slots',sk),{doctor,date,time,apptId:ref.id,parentUid:child.parentUid||'',createdAt:now});
+   childKeys(child.fileNo,date,time,val('bs')).forEach(k=>b.set(doc(db,'slots',k),{kind:'child',fileNo:child.fileNo,date,apptId:ref.id,parentUid:child.parentUid||'',createdAt:now}));
+   b.set(ref,{childName:child.name,fileNo:child.fileNo,idno:child.idno||'',diagnosis:child.diagnosis||'',history:child.history||'',cstatus:child.status||'',gender:child.gender||'',dob:child.dob||'',service:val('bs'),branch:val('bb'),doctor,date,time,parentUid:child.parentUid||'',slot:true,cslot:true,status:'pending',createdBy:U.name,createdAt:new Date().toISOString()});
+   await b.commit()})().catch(e=>{throw e.code==='permission-denied'?{code:'الموعد محجوز مسبقاً لهذا الأخصائي'}:e}),'تم حفظ الموعد'))go('checkin')},
+ async create(){const mn=val('mn'),mp=val('mp').replace(/\D/g,''),cn=val('cn'),ci=val('ci'),dob=val('cd'),dx=val('cx');
+  if(!mn||!mp||!cn||!dob||!dx)return toast('أكمل الحقول الأساسية',0);
+  if(!/^05\d{8}$/.test(mp))return toast('رقم الجوال يجب أن يكون 10 أرقام ويبدأ بـ 05',0);
+  if(!/^\d{10}$/.test(ci))return toast('رقم هوية الطفل يجب أن يكون 10 أرقام',0);
+  if(D.children.some(c=>c.idno===ci))return toast('رقم الهوية مسجل مسبقاً',0);
+  if(D.children.some(c=>(c.name||'').trim()===cn&&c.dob===dob))return toast('طفل بنفس الاسم وتاريخ الميلاد مسجل مسبقاً',0);
+  let fileNo,ok=false;
+  for(let i=0;i<8&&!ok;i++){fileNo='26'+rnd(4,'0123456789');if(D.children.some(c=>c.fileNo===fileNo))continue;try{await setDoc(doc(db,'file_numbers',fileNo),{by:U.uid,at:new Date().toISOString()});ok=true}catch(_){}}
+  if(!ok)return toast('تعذر توليد رقم ملف، أعد المحاولة',0);
+  let uid,username,fresh=false;
+  try{const q=await getDocs(query(collection(db,'moms_users'),where('phone','==',mp))),d0=q.docs.find(x=>x.data().uid);
+   if(d0){uid=d0.data().uid;username=d0.data().username}
+   else{username=rnd(6,'ABCDEFGHJKLMNPQRSTUVWXYZ');const c=await createUserWithEmailAndPassword(sec,username.toLowerCase()+'@khatwa.app',mp);uid=c.user.uid;await signOut(sec);fresh=true}
+  }catch(e){return toast('تعذر إنشاء حساب ولي الأمر: '+(e.code||e.message),0)}
+  const now=new Date().toISOString();
+  if(!await run((async()=>{const b=writeBatch(db);
+   b.set(doc(collection(db,'children')),{name:cn,idno:ci,dob,gender:val('cg'),diagnosis:dx,status:val('cs'),history:val('ch'),fileNo,momName:mn,momPhone:mp,parentUid:uid,joinDate:today(),createdAt:now});
+   b.set(doc(db,'id_numbers',ci),{fileNo,by:U.uid,at:now});
+   if(fresh){b.set(doc(db,'users',uid),{role:'parent',name:mn,phone:mp,username});b.set(doc(collection(db,'moms_users')),{uid,phone:mp,username,momName:mn,createdAt:now})}
+   await b.commit()})().catch(e=>{throw e.code==='permission-denied'?{code:'رقم الهوية مسجل مسبقاً'}:e}),'تم فتح الملف '+fileNo))return;
+  const msg=fresh?`مرحباً أ/ ${mn}\nتم فتح ملف ${cn} في مركز خطوة المستقبل.\nرقم الملف: ${fileNo}\n\nبيانات الدخول لتطبيق ولي الأمر:\nاسم المستخدم: ${username}\nكلمة المرور: رقم جوالكم\nيمكنكم تغييرها من التطبيق.`:`مرحباً أ/ ${mn}\nتمت إضافة ${cn} إلى حسابكم في مركز خطوة المستقبل.\nرقم الملف: ${fileNo}\nادخلوا بنفس بيانات الدخول السابقة.`;
+  window.open(`https://wa.me/966${mp.slice(1)}?text=${encodeURIComponent(msg)}`,'_blank');go('checkin')},
+ case(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;$('dlg').innerHTML=`<h3>ملف الحالة</h3>${caseHtml(a)}${B('close','','إغلاق','o')}`;$('dlg').showModal()},
+ sess(id){const a=D.appointments.find(x=>x.id===id);if(!a||a.status!=='attended')return toast('لم يسجَّل حضور الطفل',0);
+  $('dlg').innerHTML=`<h3>جلسة: ${E(a.childName)}</h3>${caseHtml(a)}${I('sd','التشخيص / التقييم الحالي')}${I('spg','نسبة تطور الحالة (%) من 0 إلى 100','number')}<label>الملاحظات (SOAP)<textarea id=sn2 rows=3></textarea></label>${I('sv','احتياجات الطفل بعد الجلسة')}${I('srx','وصفة / أجهزة أو أدوية موصى بها')}${I('se','التمارين المنزلية')}${S('srf','تحويل إلى قسم آخر',[['','لا يوجد تحويل'],...SPEC().map(x=>[x,x])])}${B('sub',id,'حفظ وإرسال للاعتماد','gr')}${B('close','','إلغاء','o')}`;$('dlg').showModal()},
+ close(){$('dlg').close()},
+ rprint(id){const x=D.invoices.find(y=>y.id===id);if(!x)return;printHtml(receiptDoc(x,U.name,new Date().toISOString(),FIN));logAct('طباعة سند قبض',(x.client||'')+' - '+x.amount)},
+ finsave(){const r=parseFloat(val('tvr')||'0');if(!(r>=0&&r<=100))return toast('نسبة الضريبة بين 0 و 100',0);run(setDoc(doc(db,'settings','finance'),{vatNo:val('tvn'),vatRate:r,crNo:val('tcr'),by:U.name,at:new Date().toISOString()},{merge:true}),'تم حفظ إعدادات السند')},
+
+ rsend(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;const c=D.children.find(x=>x.fileNo===a.fileNo);if(!c?.momPhone)return toast('لا يوجد رقم جوال',0);
+  const m={'{ولي الأمر}':c.momName||'','{الطفل}':a.childName||'','{التاريخ}':a.date||'','{الوقت}':a.time||'','{الأخصائي}':a.doctor||'','{الفرع}':a.branch||'','{الخدمة}':a.service||''};
+  let t=($('rt')?.value||REM||DEFT);Object.entries(m).forEach(([k,v])=>{t=t.split(k).join(v)});
+  let p=String(c.momPhone).replace(/\\D/g,'');p=p.startsWith('966')?p:'966'+p.replace(/^0/,'');
+  window.open(`https://wa.me/${p}?text=${encodeURIComponent(t)}`,'_blank');
+  updateDoc(doc(db,'appointments',id),{reminded:true,remindedAt:new Date().toISOString(),remindedBy:U.name}).catch(()=>toast('أُرسل التذكير لكن تعذر تسجيله',0))},
+ rtsave(){const t=($('rt')?.value||'').trim();if(!t)return toast('اكتب نص الرسالة',0);run(setDoc(doc(db,'settings','reminder'),{text:t,by:U.name,at:new Date().toISOString()},{merge:true}),'تم حفظ نص التذكير')},
+
+ async cview(id){const c=D.children.find(x=>x.id===id);if(!c)return;let k;try{k=await kidFull(c)}catch(e){k=kid(c)}const rp=[...k.rp].sort(srtR).reverse(),pts=rp.filter(r=>r.status==='approved'&&typeof r.progress==='number'),last=pts[0];
+  const kv=[['الاسم',c.name],['رقم الملف',c.fileNo],['الهوية',c.idno],['الميلاد',(c.dob||'')+(c.dob?' ('+cAge(c.dob)+')':'')],['الجنس',c.gender],['الجنسية',c.nat],['التشخيص',c.diagnosis],['حالة الملف',c.status],['الفرع',c.branch],['الأخصائي المسؤول',c.doctor],['الحساسية',c.allergies],['الأدوية',c.meds],['التاريخ المرضي',c.history],['ولي الأمر',c.momName],['الجوال',c.momPhone],['جوال بديل',c.altPhone],['العنوان',c.address],['ملاحظات',c.notes],['الانضمام',c.joinDate]];
+  $('dlg').className='w';
+  $('dlg').innerHTML=`<h3>${E(c.name)} <small style="color:var(--g)">${V(c.fileNo)}</small></h3>${last?`<div class=card style="padding:10px"><b>آخر نسبة تطور: ${last.progress}%</b><div style="height:8px;background:var(--l);border-radius:8px;margin-top:6px;overflow:hidden"><i style="display:block;height:100%;width:${last.progress}%;background:#16a34a"></i></div></div>`:''}<div class=ov><table>${kv.map(([a,b])=>`<tr><th>${a}</th><td style="white-space:normal">${V(b)}</td></tr>`).join('')}</table></div><h4>الاشتراك</h4><p class=mu>${k.sb.filter(x=>x.status==='active').map(x=>E(x.packageName)+': '+x.used+'/'+x.total).join('، ')||'بدون اشتراك فعّال'}</p><h4>الجلسات والتقارير (${rp.length})</h4>${rp.map(r=>`<div class=card style="padding:10px;font-size:13px;margin:6px 0"><b>${V(r.date)}</b> — ${V(r.doctor)} <span class=tg>${r.status==='approved'?'معتمد':'بانتظار الاعتماد'}</span>${typeof r.progress==='number'?` <b style="color:#0369a1">${r.progress}%</b>`:''}<br>التشخيص: ${V(r.diagnosis)}<br>الملاحظات: ${V(r.notes)}${r.exercise?`<br>التمارين: ${V(r.exercise)}`:''}${r.referTo?`<br>تحويل: ${V(r.referTo)}`:''}</div>`).join('')||'<p class=mu>لا توجد جلسات بعد</p>'}<div style="margin-top:10px">${B('cprint',id,'طباعة / PDF','gr')}${B('cedit',id,'تعديل')}${B('close','','إغلاق','o')}</div>`;if(!$('dlg').open)$('dlg').showModal()},
+ cprint(id){const c=D.children.find(x=>x.id===id);if(!c)return;printAsync(async()=>{let k;try{k=await kidFull(c)}catch(e){k=kid(c)}return childDoc(c,k.rp,k.ap,k.sb,U.name,new Date().toISOString())});logAct('طباعة ملف طفل',c.name+' ('+c.fileNo+')')},
+ cedit(id){const c=D.children.find(x=>x.id===id);if(!c)return;
+  const stl=['تقييم أولي جديد','مستمر في التأهيل','ما بعد جراحة عظمية','مكتمل التأهيل','متوقف'];if(c.status&&!stl.includes(c.status))stl.push(c.status);
+  const brs=BR();if(c.branch&&!brs.includes(c.branch))brs.push(c.branch);
+  $('dlg').className='w';
+  $('dlg').innerHTML=`<h3>تعديل ملف: ${E(c.name)} <small style="color:var(--g)">${V(c.fileNo)}</small></h3><h4>بيانات الطفل</h4><div class=g2>${I('cen','اسم الطفل')}${I('cei','رقم الهوية')}${I('ced','تاريخ الميلاد','date')}${S('ceg','الجنس',[['','—'],['ذكر','ذكر'],['أنثى','أنثى']])}${I('cenat','الجنسية')}${S('cebr','الفرع',[['','—'],...brs.map(x=>[x,x])])}${I('cex','التشخيص')}${S('ces','حالة الملف',stl.map(x=>[x,x]))}${I('cedoc','الأخصائي المسؤول')}${I('ceal','الحساسية')}${I('cemd','الأدوية الحالية')}${I('cejd','تاريخ الانضمام','date')}</div><label>التاريخ المرضي<textarea id=ceh rows=3></textarea></label><h4>ولي الأمر</h4><div class=g2>${I('cemn','اسم ولي الأمر')}${I('cemp','الجوال (05xxxxxxxx)','tel')}${I('ceap','جوال بديل','tel')}${I('cead','العنوان')}</div><small style="color:var(--g);display:block">تعديل الجوال هنا يغيّر بيانات الملف فقط. لتغيير بيانات دخول ولي الأمر استخدم قسم حسابات أولياء الأمور.</small><label>ملاحظات الملف<textarea id=cenote rows=2></textarea></label>${B('csave',id,'حفظ التعديلات','gr')}${B('close','','إلغاء','o')}`;
+  [['cen','name'],['cei','idno'],['ced','dob'],['ceg','gender'],['cenat','nat'],['cebr','branch'],['cex','diagnosis'],['ces','status'],['cedoc','doctor'],['ceal','allergies'],['cemd','meds'],['cejd','joinDate'],['ceh','history'],['cemn','momName'],['cemp','momPhone'],['ceap','altPhone'],['cead','address'],['cenote','notes']].forEach(([k,f])=>{$(k).value=c[f]??''});
+  if(!$('dlg').open)$('dlg').showModal()},
+ async csave(id){const c=D.children.find(x=>x.id===id);if(!c)return;const g=k=>val(k),nm=g('cen'),mp=g('cemp').replace(/\D/g,''),idn=g('cei');
+  if(!nm)return toast('أدخل اسم الطفل',0);
+  if(mp&&!/^05\d{8}$/.test(mp))return toast('الجوال يجب أن يكون 05xxxxxxxx',0);
+  if(idn&&D.children.some(x=>x.id!==id&&x.idno===idn))return toast('رقم الهوية مسجل لطفل آخر',0);
+  LC=nm;const d={name:nm,idno:idn,dob:g('ced'),gender:g('ceg'),nat:g('cenat'),branch:g('cebr'),diagnosis:g('cex'),status:g('ces'),doctor:g('cedoc'),allergies:g('ceal'),meds:g('cemd'),joinDate:g('cejd'),history:g('ceh'),momName:g('cemn'),momPhone:mp,altPhone:g('ceap').replace(/\D/g,''),address:g('cead'),notes:g('cenote'),updatedBy:U.name,updatedAt:new Date().toISOString()};
+  const ok=await run((async()=>{const b=writeBatch(db);b.update(doc(db,'children',id),d);
+   if(nm!==c.name&&c.fileNo)['appointments','reports','subscriptions'].forEach(k=>D[k].filter(x=>x.fileNo===c.fileNo&&'childName' in x).forEach(x=>b.update(doc(db,k,x.id),{childName:nm})));
+   await b.commit()})(),'تم حفظ ملف الطفل');
+  if(ok)A.cview(id)},
+
+ async clrlogs(){if(U.role!=='it')return toast('التصفير للـ IT فقط',0);
+  if(!await ask('سيُحذف سجل العمليات بالكامل نهائياً ولا يمكن استرجاعه. يُنصح بتصديره إلى Excel أولاً. المتابعة؟','تصفير'))return;
+  let n=0;toast('جاري التصفير...',1);
+  try{for(let i=0;i<100;i++){const q=await getDocs(query(collection(db,'activity_logs'),limit(400)));if(q.empty)break;const b=writeBatch(db);q.docs.forEach(d=>b.delete(d.ref));await b.commit();n+=q.size}}
+  catch(e){return toast('توقف التصفير بعد حذف '+n+' سجل: '+(e.code||e.message),0)}
+  toast(`تم تصفير السجل (${n} عملية)`,1)},
+ async xexp(k){if(DSM[k])await xdl([k],DSM[k].t)},
+ async xall(){await xdl(DS.map(d=>d.k),'khatwa-data')},
+ ximp(k){if(!['manager','it'].includes(U.role))return toast('الاستيراد للمدير والـ IT فقط',0);
+  const inp=document.createElement('input');inp.type='file';inp.accept='.xlsx,.xls,.csv';
+  inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
+   try{await loadXL();const wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),allow=k==='*'?IMPC:DSM[k].s.map(x=>x[0]).filter(c=>IMPC.includes(c)),sh=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:''}),items=[],notes=[];
+    if(!allow.length)return toast('هذه القائمة للسجل فقط ولا تُستورد',0);
+    const mt=wb.Sheets._meta?sh('_meta').slice(1):[],plan=[];
+    if(mt.length)mt.forEach(([name,coll,kj,tj])=>{if(!wb.Sheets[name])return;if(!allow.includes(coll)){notes.push(`تم تجاوز ورقة "${name}" (لا تخص هذه القائمة)`);return}plan.push({name,coll,keys:JSON.parse(kj),types:JSON.parse(tj)})});
+    else if(k!=='*'){const n=wb.SheetNames[0],a=sh(n),keys=(a[0]||[]).map(h=>String(h).startsWith('المعرّف')?'id':(REV[String(h).trim()]||String(h).trim())),types=keys.map((_,j)=>typeof (a[1]||[])[j]==='number'?'n':typeof (a[1]||[])[j]==='boolean'?'b':'s');plan.push({name:n,coll:allow[0],keys,types});notes.push('ملف بدون ورقة بيانات النظام: طُبّقت الأعمدة حسب أسمائها')}
+    else return toast('هذا الملف ليس من تصدير النظام، افتح استيراد قائمة محددة',0);
+    const sum=[];
+    plan.forEach(p=>{const ids=new Map((D[p.coll]||[]).map(x=>[x.id,x])),nk=NK[p.coll],rows=xparse(sh(p.name),p.keys,p.types);let nw=0,up=0,er=0;
+     rows.forEach(r=>{if(r.err){er++;return}if(!r.id&&nk&&r.data[nk]){const m=(D[p.coll]||[]).find(x=>String(x[nk]||'')===r.data[nk]);if(m)r.id=m.id}
+      if(r.id&&ids.has(r.id))up++;else nw++;items.push({coll:p.coll,id:r.id,data:r.data})});
+     sum.push(`<tr><td>${E(p.name)}</td><td>${nw}</td><td>${up}</td><td>${er}</td></tr>`)});
+    if(!items.length)return toast('لا توجد سجلات صالحة في الملف',0);
+    XIMP=items;$('dlg').className='';
+    $('dlg').innerHTML=`<h3>معاينة الاستيراد</h3><div class=ov><table><tr><th>الورقة</th><th>جديد</th><th>تحديث</th><th>أخطاء</th></tr>${sum.join('')}</table></div>${notes.map(n=>`<p class=mu>${E(n)}</p>`).join('')}<p class=mu>سيُضاف الجديد ويُحدَّث الموجود (بدمج الحقول) ولا يُحذف أي سجل.</p>${B('ximpgo','','تنفيذ الاستيراد','gr')}${B('close','','إلغاء','o')}`;$('dlg').showModal()
+   }catch(e){toast('تعذر قراءة الملف: '+(e.message||e),0)}};
+  inp.click()},
+ async ximpgo(){const it=XIMP;if(!it||!it.length)return;A.close();let n=0;toast('جاري الاستيراد...',1);
+  try{for(let i=0;i<it.length;i+=400){const part=it.slice(i,i+400),b=writeBatch(db);part.forEach(x=>b.set(x.id?doc(db,x.coll,x.id):doc(collection(db,x.coll)),x.data,{merge:true}));await b.commit();n+=part.length}}
+  catch(e){return toast('توقف الاستيراد بعد '+n+' سجل: '+(e.code||e.message),0)}
+  XIMP=null;toast(`تم استيراد ${n} سجل`,1);logAct('استيراد Excel',n+' سجل')},
+
+ spick(id){const s=D.staff.find(x=>x.id===id);if(!s)return;if(s.dept==='other')return toast('قسم هذا الموظف "أخرى" بدون حساب دخول، غيّر قسمه من شؤون الموظفين',0);SELS=id;$('sn').value=s.name;$('sn').readOnly=true;$('sr').value=s.dept||'doctor';$('sq2').value='';SC.susers.u();$('su').focus()},
+ sclear(){SELS=null;$('sn').value='';$('sn').readOnly=false},
+ utog(id){const m=D.users.find(x=>x.id===id);if(!m)return;if(id===U.uid)return toast('لا يمكنك إيقاف حسابك الحالي',0);LC=m.name||'';run(updateDoc(doc(db,'users',id),{disabled:!m.disabled}),m.disabled?'تم تفعيل الحساب':'تم إيقاف الحساب')},
+ sgen(){$('sp').value=rnd(8,'abcdefghjkmnpqrstuvwxyz23456789')},
+ async mkuser(){const nm=val('sn'),un=val('su'),pw=$('sp').value.trim(),role=$('sr').value;
+  if(!nm||!un||!pw)return toast('الاسم واسم المستخدم وكلمة المرور مطلوبة',0);
+  if(role==='doctor'&&!D.staff.some(x=>!x.archived&&x.name===nm))return toast('اسم الطبيب لازم يطابق اسمه في شؤون الموظفين، اختره من القائمة',0);
+  if(!/^[A-Za-z0-9._-]{3,30}$/.test(un))return toast('اسم المستخدم: حروف إنجليزية وأرقام فقط (3 إلى 30)',0);
+  if(pw.length<6)return toast('كلمة المرور 6 أحرف على الأقل',0);
+  if(D.moms_users.some(x=>String(x.username||'').toLowerCase()===un.toLowerCase()))return toast('اسم المستخدم محجوز',0);
+  let uid;try{const c=await createUserWithEmailAndPassword(sec,un.toLowerCase()+'@khatwa.app',pw);uid=c.user.uid;await signOut(sec)}catch(e){return toast(e.code==='auth/email-already-in-use'?'اسم المستخدم مستخدم':'تعذر إنشاء الحساب: '+(e.code||e.message),0)}
+  LC=nm;if(!await run(setDoc(doc(db,'users',uid),{role,name:nm,username:un,staffId:SELS||'',createdAt:new Date().toISOString(),createdBy:U.name}),'تم إنشاء المستخدم'))return toast('أُنشئ الحساب لكن تعذر حفظ دوره. اربطه من شاشة الصلاحيات بهذا الـ UID: '+uid,0);
+  ['sn','su','sp'].forEach(i=>$(i).value='');SELS=null;$('sn').readOnly=false;
+  $('dlg').innerHTML=`<h3>تم إنشاء المستخدم</h3><div class=card dir=ltr style="text-align:left">Username: <b>${E(un)}</b><br>Password: <b>${E(pw)}</b></div><p class=mu>سجّل البيانات الآن، كلمة المرور لا تُحفظ في النظام.</p>${B('close','','إغلاق','o')}`;$('dlg').showModal()},
+ ue(id){const m=D.users.find(x=>x.id===id);if(!m)return;
+  $('dlg').innerHTML=`<h3>تعديل مستخدم</h3><div class=g2><label>الاسم<input id=en list=stl></label>${I('eu','اسم المستخدم')}${S('er','الدور',[['manager','مدير'],['doctor','طبيب'],['reception','استقبال'],['accountant','محاسب'],['hr','موارد بشرية'],['store','مخزون'],['service','خدمة عملاء'],['it','IT']])}${I('ep','كلمة مرور جديدة (اختياري)')}</div><small style="color:var(--g);display:block;margin:6px 0">تغيير اسم المستخدم أو كلمة المرور ينشئ بيانات دخول جديدة (كلمة المرور مطلوبة عند تغيير اسم المستخدم). تغيير الاسم أو الدور فقط يُحفظ مباشرة.</small>${B('egen','','توليد كلمة مرور','o')}${B('esave',id,'حفظ','gr')}${B('close','','إلغاء','o')}`;
+  $('en').value=m.name||'';$('eu').value=m.username||'';$('er').value=m.role||'manager';$('dlg').showModal()},
+ egen(){$('ep').value=rnd(8,'abcdefghjkmnpqrstuvwxyz23456789')},
+ async esave(id){const m=D.users.find(x=>x.id===id);if(!m)return;
+  const nm=val('en'),un=val('eu'),role=$('er').value,pw=$('ep').value.trim();
+  if(!nm||!un)return toast('الاسم واسم المستخدم مطلوبان',0);
+  if(!/^[A-Za-z0-9._-]{3,30}$/.test(un))return toast('اسم المستخدم: حروف إنجليزية وأرقام فقط (3 إلى 30)',0);
+  if(id===U.uid&&role!==m.role)return toast('لا يمكنك تغيير دور حسابك الحالي',0);
+  if(D.users.some(x=>x.id!==id&&String(x.username||'').toLowerCase()===un.toLowerCase())||D.moms_users.some(x=>String(x.username||'').toLowerCase()===un.toLowerCase()))return toast('اسم المستخدم مستخدم',0);
+  const renew=un.toLowerCase()!==String(m.username||'').toLowerCase()||!!pw;
+  if(renew&&pw.length<6)return toast('أدخل كلمة مرور جديدة (6 أحرف على الأقل)',0);
+  if(renew&&id===U.uid)return toast('غيّر بيانات دخولك من حساب IT آخر',0);
+  LC=nm;let uid=id;
+  if(renew){try{const c=await createUserWithEmailAndPassword(sec,un.toLowerCase()+'@khatwa.app',pw);uid=c.user.uid;await signOut(sec)}catch(e){return toast('تعذر إنشاء الحساب: '+(e.code||e.message),0)}}
+  const ok=await run((async()=>{const b=writeBatch(db);
+   if(renew){const{id:_,...old}=m;b.set(doc(db,'users',uid),{...old,name:nm,role,username:un,updatedAt:new Date().toISOString()});b.delete(doc(db,'users',id))}
+   else b.set(doc(db,'users',id),{name:nm,role,username:un},{merge:true});
+   await b.commit()})(),'تم حفظ المستخدم');
+  if(!ok)return;if(!renew)return A.close();
+  $('dlg').innerHTML=`<h3>تم التحديث</h3><div class=card dir=ltr style="text-align:left">Username: <b>${E(un)}</b><br>Password: <b>${E(pw)}</b></div>${B('close','','إغلاق','o')}`},
+
+ pe(id){const m=D.moms_users.find(x=>x.id===id);if(!m)return;
+  $('dlg').innerHTML=`<h3>تعديل حساب ولي الأمر</h3><div class=g2>${I('pn','اسم ولي الأمر')}${I('pph','رقم الجوال')}${I('pu','اسم المستخدم')}${I('pp','كلمة مرور جديدة (اختياري)')}</div><small style="color:var(--g);display:block;margin:6px 0">تغيير اسم المستخدم أو كلمة المرور ينشئ بيانات دخول جديدة ويربط بها ملفات الأطفال تلقائياً. إذا غيّرت اسم المستخدم وتركت كلمة المرور فارغة تكون كلمة المرور رقم الجوال.</small>${B('pgen','','توليد كلمة مرور','o')}${B('psave',id,'حفظ','gr')}${B('close','','إلغاء','o')}`;
+  $('pn').value=m.momName||'';$('pph').value=m.phone||'';$('pu').value=m.username||'';$('dlg').showModal()},
+ pgen(){$('pp').value=rnd(8,'abcdefghjkmnpqrstuvwxyz23456789')},
+ async psave(id){const m=D.moms_users.find(x=>x.id===id);if(!m)return;
+  const nm=val('pn'),ph=val('pph').replace(/\s/g,''),un=val('pu'),pw=$('pp').value.trim();
+  if(!nm||!ph||!un)return toast('الاسم والجوال واسم المستخدم مطلوبة',0);
+  if(!/^[A-Za-z0-9._-]{3,30}$/.test(un))return toast('اسم المستخدم: حروف إنجليزية وأرقام فقط (3 إلى 30)',0);
+  if(D.moms_users.some(x=>x.id!==id&&String(x.username||'').toLowerCase()===un.toLowerCase()))return toast('اسم المستخدم مستخدم لولي أمر آخر',0);
+  if(pw&&pw.length<6)return toast('كلمة المرور 6 أحرف على الأقل',0);
+  const renew=un.toLowerCase()!==String(m.username||'').toLowerCase()||!!pw,pass=pw||ph;
+  if(renew&&pass.length<6)return toast('كلمة المرور (رقم الجوال) أقصر من 6',0);
+  LC=nm;const now=new Date().toISOString();let uid=m.uid;
+  if(renew){try{const c=await createUserWithEmailAndPassword(sec,un.toLowerCase()+'@khatwa.app',pass);uid=c.user.uid;await signOut(sec)}catch(e){return toast('تعذر إنشاء الحساب: '+(e.code||e.message),0)}}
+  const ok=await run((async()=>{const b=writeBatch(db);
+   b.update(doc(db,'moms_users',id),{momName:nm,phone:ph,username:un,uid,updatedAt:now});
+   if(renew){b.set(doc(db,'users',uid),{role:'parent',name:nm,phone:ph,username:un});if(m.uid)b.delete(doc(db,'users',m.uid));
+    ['children','appointments','reports','subscriptions'].forEach(k=>D[k].filter(x=>m.uid&&x.parentUid===m.uid).forEach(x=>b.update(doc(db,k,x.id),{parentUid:uid})))}
+   else if(m.uid)b.set(doc(db,'users',m.uid),{name:nm,phone:ph},{merge:true});
+   D.children.filter(c=>m.uid&&c.parentUid===m.uid).forEach(c=>b.update(doc(db,'children',c.id),{momName:nm,momPhone:ph}));
+   await b.commit()})(),'تم حفظ حساب ولي الأمر');
+  if(!ok)return;
+  if(!renew)return A.close();
+  PCR={ph,un,pass};
+  $('dlg').innerHTML=`<h3>تم التحديث</h3><div class=card dir=ltr style="text-align:left">Username: <b>${E(un)}</b><br>Password: <b>${E(pass)}</b></div>${B('pwa','','إرسال بالواتساب','gr')}${B('close','','إغلاق','o')}`},
+ pwa(){if(!PCR)return;let p=PCR.ph.replace(/\D/g,'');p=p.startsWith('966')?p:'966'+p.replace(/^0/,'');
+  window.open(`https://wa.me/${p}?text=${encodeURIComponent(`بيانات الدخول لتطبيق ولي الأمر - مركز خطوة المستقبل:\nاسم المستخدم: ${PCR.un}\nكلمة المرور: ${PCR.pass}`)}`,'_blank')},
+
+ async sub(id){const a=D.appointments.find(x=>x.id===id),dx=val('sd'),nt=val('sn2'),rf=val('srf');const pg=parseFloat(val('spg'));if(!a||!dx||!nt)return toast('أدخل التشخيص والملاحظات',0);if(!(pg>=0&&pg<=100))return toast('أدخل نسبة تطور الحالة بين 0 و 100',0);
+  const sb=subOf(a.fileNo),now=new Date().toISOString();
+  if(await run((async()=>{const b=writeBatch(db);
+   b.set(doc(collection(db,'reports')),{apptId:id,childName:a.childName,fileNo:a.fileNo||'',parentUid:a.parentUid||'',doctor:a.doctor,diagnosis:dx,progress:pg,notes:nt,needs:val('sv'),prescription:val('srx'),exercise:val('se'),referTo:rf,status:'pending',date:today(),createdAt:now});
+   b.update(doc(db,'appointments',id),{status:'completed'});
+   if(sb)b.update(doc(db,'subscriptions',sb.id),{used:sb.used+1,status:sb.used+1>=sb.total?'done':'active'});
+   if(rf)b.set(doc(collection(db,'messages')),{fromUid:U.uid,fromName:U.name,fromRole:U.role,toRole:'reception',subject:'تحويل حالة',body:`تحويل الطفل ${a.childName} (ملف ${a.fileNo||'—'}) إلى: ${rf}`,read:false,createdAt:now});
+   await b.commit()})(),'أُرسل التقرير'+(sb?'، وخُصمت جلسة من الباقة':'')))$('dlg').close()},
+ addspec(){const n=val('spn');if(!n)return;if(D.specialties.some(x=>x.name===n))return toast('موجود مسبقاً',0);run(addDoc(collection(db,'specialties'),{name:n}),'تمت الإضافة').then(()=>{$('spn').value=''})},
+ delspec:id=>del('specialties',id,'حذف الاختصاص؟'),
+ addbranch(){const n=val('brn');if(!n)return;if(D.branches.some(x=>x.name===n))return toast('موجود مسبقاً',0);run(addDoc(collection(db,'branches'),{name:n,city:val('brc')}),'تمت الإضافة').then(()=>{$('brn').value='';$('brc').value=''})},
+ delbranch:id=>del('branches',id,'حذف الفرع؟'),
+ async sal(id){const v=parseFloat(await askVal('الراتب الأساسي الشهري (ر.س):',D.payroll.find(x=>x.id===id)?.salary??''));if(!(v>=0))return;run(setDoc(doc(db,'payroll',id),{salary:v,by:U.name,at:new Date().toISOString()},{merge:true}),'تم حفظ الراتب')},
+ additem(){const n=val('in1');if(!n)return toast('أدخل اسم الصنف',0);run(addDoc(collection(db,'inventory'),{name:n,qty:+val('in2')||0,min:+val('in3')||0,unit:val('in4'),updatedAt:new Date().toISOString()}),'تمت الإضافة').then(()=>['in1','in2','in3','in4'].forEach(i=>{$(i).value=''}))},
+ qplus:id=>qty(id,1),qminus:id=>qty(id,-1),delitem:id=>del('inventory',id,'حذف الصنف؟'),
+ addinq(){const n=val('qn');if(!n)return toast('أدخل الاسم',0);run(addDoc(collection(db,'inquiries'),{name:n,phone:val('qph'),note:val('qt'),status:'new',date:today(),by:U.name,createdAt:new Date().toISOString()}),'تم التسجيل').then(()=>['qn','qph','qt'].forEach(i=>{$(i).value=''}))},
+ inqf:id=>sub('inquiries',id,{status:'follow'}),inqc:id=>sub('inquiries',id,{status:'closed'}),delinq:id=>del('inquiries',id,'حذف السجل؟'),
+ addpkg(){const n=val('pn'),c=+val('pc'),pr=+val('pp');if(!n||!(c>0)||!(pr>=0))return toast('أكمل بيانات الباقة',0);run(addDoc(collection(db,'packages'),{name:n,sessions:c,price:pr,service:val('ps')}),'تمت إضافة الباقة').then(()=>['pn','pc','pp'].forEach(i=>{$(i).value=''}))},
+ delpkg:id=>del('packages',id,'حذف الباقة؟'),
+ sfind(){const f=val('sfno').toLowerCase();child=D.children.find(c=>String(c.fileNo||'').toLowerCase()===f)||null;$('sfc').innerHTML=child?`<div class=card><b>${E(child.name)}</b><br><small>${pkgTxt(child.fileNo)}</small></div>`:'';if(!child)toast('لا يوجد طفل بهذا الرقم',0)},
+ async subscribe(){if(!child)return toast('اجلب بيانات الطفل أولاً',0);const p=D.packages.find(x=>x.id===val('spk'));if(!p)return toast('اختر الباقة',0);if(subOf(child.fileNo))return toast('لدى الطفل اشتراك فعّال لم ينتهِ',0);
+  const now=new Date().toISOString();
+  if(await run((async()=>{const b=writeBatch(db);b.set(doc(collection(db,'subscriptions')),{fileNo:child.fileNo,childName:child.name,parentUid:child.parentUid||'',packageId:p.id,packageName:p.name,total:+p.sessions,used:0,status:'active',date:today(),by:U.name,createdAt:now});
+   b.set(doc(collection(db,'invoices')),{client:`${child.name} (${child.fileNo})`,service:'اشتراك: '+p.name,amount:+p.price,method:val('spm'),date:today(),by:U.name,createdAt:now});await b.commit()})(),'تم الاشتراك وإصدار السند')){child=null;$('sfno').value='';$('sfc').innerHTML=''}},
+ async sendleave(){const f=val('lf'),to=val('lto')||f,k=val('lt'),vac=k.startsWith('إجازة');
+  if(!f||!val('lr'))return toast('أدخل التاريخ والسبب',0);if(to<f)return toast('تاريخ النهاية قبل البداية',0);if(f<today())return toast('لا يمكن الطلب بتاريخ سابق',0);
+  if(vac&&(new Date(to)-new Date(f))/864e5>30)return toast('الإجازة في الطلب الواحد لا تتجاوز 31 يوماً',0);
+  if(!vac&&(!val('lh1')||!val('lh2')))return toast('حدد ساعات الاستئذان',0);
+  const now=new Date().toISOString();
+  if(await run((async()=>{const b=writeBatch(db);
+   b.set(doc(collection(db,'leaves')),{uid:U.uid,name:U.name,role:U.role,type:vac?'إجازة':'استئذان',from:f,to,h1:val('lh1'),h2:val('lh2'),reason:val('lr'),status:'pending',createdAt:now});
+   b.set(doc(collection(db,'notifications')),{toUid:'',toRole:'manager',kind:'leave',title:'طلب استئذان جديد',body:`${U.name} (${RL[U.role]||''}): ${vac?'إجازة':'استئذان'} ${f}${to!==f?' إلى '+to:''}`,by:U.name,createdAt:now});
+   await b.commit()})(),'أُرسل الطلب للمدير'))['lf','lto','lh1','lh2','lr'].forEach(i=>{$(i).value=''})},
+ lvok:id=>A.lvdecide(id,true),lvno:id=>A.lvdecide(id,false),
+ async lvdecide(id,ok){const x=D.leaves.find(l=>l.id===id);if(!x||x.status!=='pending')return;
+  if(!await ask((ok?'الموافقة على طلب ':'رفض طلب ')+x.name+'؟',ok?'موافقة':'رفض'))return;
+  const now=new Date().toISOString(),b=writeBatch(db);
+  b.update(doc(db,'leaves',id),{status:ok?'approved':'rejected',managerNote:'',decidedBy:U.name,decidedAt:now});
+  if(ok&&x.type==='إجازة'){const ds=[];for(let d=new Date(x.from+'T00:00:00');d<=new Date(x.to+'T00:00:00')&&ds.length<32;d.setDate(d.getDate()+1))ds.push(d.toLocaleDateString('en-CA'));
+   ds.forEach(d=>b.set(doc(db,'off_days',(x.name+'_'+d).replace(/[\/\s]+/g,'-')),{doctor:x.name,date:d,leaveId:id,createdAt:now}))}
+  b.set(doc(collection(db,'notifications')),{toUid:x.uid,toRole:'',kind:'leave',title:ok?'تمت الموافقة على طلبك':'تم رفض طلبك',body:`${x.type} ${x.from}${x.to!==x.from?' إلى '+x.to:''}`,by:U.name,createdAt:now});
+  run(b.commit(),ok?'تمت الموافقة وأُرسل تنبيه للموظف':'تم الرفض وأُرسل تنبيه للموظف')},
+ sendnotif(){const t=val('ntt'),b=val('ntb');if(!t||!b)return toast('أدخل العنوان والنص',0);run(addDoc(collection(db,'notifications'),{toUid:'',toRole:val('nt'),kind:'system',title:t,body:b,by:U.name,createdAt:new Date().toISOString()}),'أُرسل الإشعار').then(()=>{$('ntt').value='';$('ntb').value=''})},
+ sendmsg(){const b=val('mbody');if(!b)return toast('اكتب الرسالة',0);run(addDoc(collection(db,'messages'),{fromUid:U.uid,fromName:U.name,fromRole:U.role,toRole:val('mto'),subject:val('msub'),body:b,read:false,createdAt:new Date().toISOString()}),'أُرسلت الرسالة').then(()=>{$('mbody').value='';$('msub').value=''})},
+ mtab(v){mtab=v;SC.msgs.u()},rd:id=>sub('messages',id,{read:true}),
+ async restore(v){const[c,id]=v.split(':');if(!await run(updateDoc(doc(db,c,id),{archived:false}),'استُعيد من الأرشيف'))return;
+  if(c==='staff'){const s=D.staff.find(x=>x.id===id);D.users.filter(u=>u.role!=='parent'&&u.disabled&&(u.staffId?u.staffId===id:s&&u.name===s.name)).forEach(u=>updateDoc(doc(db,'users',u.id),{disabled:false}).catch(()=>toast('تعذر تفعيل حساب الدخول',0)))}},
+ xl(){if(SCDS[cur])return A.xexp(SCDS[cur]);const t=document.querySelector('#tb table');if(!t)return toast('لا يوجد جدول للتصدير في هذه الشاشة',0);const c=t.cloneNode(true);c.querySelectorAll('button').forEach(b=>b.remove());
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff<html dir="rtl"><head><meta charset="utf-8"></head><body>'+c.outerHTML+'</body></html>'],{type:'application/vnd.ms-excel'}));a.download=(SC[cur].n||'export')+'-'+today()+'.xls';a.click();logAct('تصدير Excel',SC[cur].n)},
+ async backup(){toast('جاري إعداد النسخة...',1);const out={meta:{at:new Date().toISOString(),by:U.name,version:1}};
+  for(const c of ['children','appointments','staff','reports','attendance','invoices','specialties','branches','payroll','inventory','inquiries','packages','subscriptions','activity_logs','users','settings','moms_users','staff_docs','messages','file_numbers']){try{out[c]=(await getDocs(collection(db,c))).docs.map(d=>({id:d.id,...d.data()}))}catch(e){out[c]={error:e.code}}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));a.download='khatwa-backup-'+today()+'.json';a.click();
+  ls('khatwa_bk',new Date().toLocaleString('ar-SA'));logAct('نسخ احتياطي كامل','');SC.backup.u();toast('تم تنزيل النسخة',1)},
+ flt(v){af=v;SC.appr.u()},
+ approve:id=>run(updateDoc(doc(db,'reports',id),{status:'approved',approvedBy:U.name,approvedAt:new Date().toISOString()}),'تم الاعتماد'),
+ in:id=>{const s=D.staff.find(x=>x.id===id);run(setDoc(doc(db,'attendance',id+'_'+today()),{staffId:id,staffName:s?.name||'',date:today(),status:'present',in:new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})},{merge:true}),'سُجّل الحضور')},
+ out:id=>run(setDoc(doc(db,'attendance',id+'_'+today()),{status:'left',out:new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})},{merge:true}),'سُجّل الانصراف'),
+ async inv(){const client=val('fc1'),amount=parseFloat(val('fa'));if(!client||!(amount>0))return toast('أدخل المراجع ومبلغاً صحيحاً',0);
+  if(await run(addDoc(collection(db,'invoices'),{client,service:val('fs'),amount,method:val('fm'),date:today(),by:U.name,createdAt:new Date().toISOString()}),'تم حفظ السند'))['fc1','fs','fa'].forEach(i=>$(i).value='')},
+ async delchild(id){const c=D.children.find(x=>x.id===id);if(!c)return;await ask(`أرشفة ملف ${c.name}؟ (يمكن استعادته من الأرشيف)`,'أرشفة')&&run(updateDoc(doc(db,'children',id),{archived:true,archivedBy:U.name,archivedAt:new Date().toISOString()}),'أُرشف ملف طفل')},
+ async delstaff(id){const s=D.staff.find(x=>x.id===id);if(!s)return;if(D.appointments.some(a=>a.doctor===s.name&&a.status==='pending'))return toast('للأخصائي مواعيد قائمة',0);
+  if(!await ask(`أرشفة ${s.name}؟ سيتوقف حساب دخوله إن وُجد، ويمكن استعادته من الأرشيف.`,'أرشفة'))return;
+  if(!await run(updateDoc(doc(db,'staff',id),{archived:true,archivedBy:U.name,archivedAt:new Date().toISOString()}),'أُرشف الموظف'))return;
+  const us=D.users.filter(u=>u.role!=='parent'&&u.id!==U.uid&&(u.staffId?u.staffId===id:u.name===s.name));
+  try{await Promise.all(us.map(u=>updateDoc(doc(db,'users',u.id),{disabled:true})))}catch(e){toast('أُرشف الموظف لكن تعذر إيقاف حساب دخوله، أوقفه من مستخدمو النظام',0)}},
+ snew(){sOpen('')},sedit(id){sOpen(id)},
+ sv(id){const s=D.staff.find(x=>x.id===id);if(!s)return;const p=D.payroll.find(x=>x.id===id)||{};
+  const rows=[['القسم',V(DL[s.dept||'doctor'])],['الاختصاص / المسمى',V(s.title)],['الفرع',V(s.branch)],['الجوال',V(s.phone)],['الجنسية',V(p.nat)],['الجنس',V(p.gen)],['تاريخ الميلاد',V(p.dob)],['الحالة الاجتماعية',V(p.ms)],['البريد',V(p.email)],['العنوان',V(p.addr)],['طوارئ',V(p.emerg)],[V(p.idType||'الهوية / الإقامة'),V(p.idNo)],['انتهاء الهوية / الإقامة',ex(p.idExpiry)],['الجواز',V(p.pp)],['انتهاء الجواز',ex(p.ppExpiry)],['تاريخ التعيين',V(s.joinDate)],['العقد',V(p.contract)],['انتهاء العقد',ex(p.contractEnd)],['التأمينات',V(p.gosi)],['الترخيص المهني',V(p.lic)],['انتهاء الترخيص',ex(p.licExpiry)],['المؤهل',V(p.qual)],['الراتب الأساسي',V(p.salary)],['بدل السكن',V(p.housing)],['بدل المواصلات',V(p.transport)],['بدلات أخرى',V(p.other)],['البنك',V(p.bank)],['الآيبان',V(p.iban)],['ملاحظات',V(p.notes)]];
+  $('dlg').innerHTML=`<h3>${E(s.name)} <small style="color:var(--g)">${V(s.empNo)}</small></h3>${s.photo?`<img src="${E(s.photo)}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:8px">`:''}<div class=ov><table>${rows.map(([a,b])=>`<tr><th>${a}</th><td style="white-space:normal">${b}</td></tr>`).join('')}</table></div><div style="margin-top:8px">${B('sdoc',id+':id','صورة الهوية','o')}${B('sdoc',id+':iqama','صورة الإقامة','o')}${B('sdoc',id+':other','مرفق آخر','o')}</div><div id=sdv></div>${B('sedit',id,'تعديل','gr')}${B('close','','إغلاق','o')}`;$('dlg').showModal()},
+ async sdoc(v){const[i,k]=v.split(':');try{const d=await getDoc(doc(db,'staff_docs',i+'_'+k));if(!d.exists())return toast('لا يوجد مرفق',0);$('sdv').innerHTML=`<img src="${E(d.data().data)}" style="max-width:100%;border-radius:9px;margin-top:8px">`}catch(e){toast('تعذر فتح المرفق: '+(e.code||e.message),0)}},
+ async ssave(id){const g=k=>val(k),nm=g('fn'),dept=g('fdept'),spec=g('ftit'),jt=g('fjt');
+  if(!nm)return toast('أدخل الاسم',0);if(dept==='doctor'&&!spec)return toast('اختر اختصاص الأخصائي',0);
+  const un=id?'':g('fun'),pw=id?'':$('fpw').value.trim();
+  if(un||pw){if(dept==='other')return toast('قسم "أخرى" بدون حساب دخول',0);if(!/^[A-Za-z0-9._-]{3,30}$/.test(un))return toast('اسم المستخدم: حروف إنجليزية وأرقام (3 إلى 30)',0);if(pw.length<6)return toast('كلمة المرور 6 أحرف على الأقل',0);
+   if(D.users.some(x=>String(x.username||'').toLowerCase()===un.toLowerCase())||D.moms_users.some(x=>String(x.username||'').toLowerCase()===un.toLowerCase()))return toast('اسم المستخدم مستخدم',0)}
+  let photo=null;const docs=[];
+  try{const f=$('fimg').files[0];if(f)photo=await imgData(f,256,.8);
+   for(const[k,kind]of[['fd_id','id'],['fd_iqama','iqama'],['fd_other','other']]){const f2=$(k).files[0];if(f2){const d=await imgData(f2,1100,.7);if(d.length>900000)throw new Error('size');docs.push([kind,d])}}}
+  catch(e){return toast('تعذر معالجة الصورة، جرّب صورة أصغر',0)}
+  let uid=null;
+  if(un){try{const c=await createUserWithEmailAndPassword(sec,un.toLowerCase()+'@khatwa.app',pw);uid=c.user.uid;await signOut(sec)}catch(e){return toast(e.code==='auth/email-already-in-use'?'اسم المستخدم مستخدم':'تعذر إنشاء الحساب: '+(e.code||e.message),0)}}
+  LC=nm;const now=new Date().toISOString(),num=k=>parseFloat(g(k))||0,ref=id?doc(db,'staff',id):doc(collection(db,'staff'));
+  const st={name:nm,dept,spec,jobTitle:jt,title:spec||jt||DL[dept],branch:g('fbr'),phone:g('fph'),joinDate:g('fjd')||today()};
+  if(photo)st.photo=photo;if(!id){st.empNo='EMP-'+rnd(4,'0123456789');st.status='مستمر'}
+  const pay={by:U.name,at:now};PAYMAP.forEach(([k,f])=>pay[f]=['salary','housing','transport','other'].includes(f)?num(k):g(k));
+  const ok=await run((async()=>{const b=writeBatch(db);b.set(ref,st,{merge:true});b.set(doc(db,'payroll',ref.id),pay,{merge:true});
+   docs.forEach(([k,d])=>b.set(doc(db,'staff_docs',ref.id+'_'+k),{staffId:ref.id,kind:k,data:d,at:now,by:U.name}));
+   if(uid)b.set(doc(db,'users',uid),{role:dept,name:nm,username:un,staffId:ref.id,createdAt:now,createdBy:U.name});await b.commit()})(),'تم حفظ ملف الموظف');
+  if(!ok)return;if(!uid)return A.close();
+  $('dlg').className='';$('dlg').innerHTML=`<h3>تم إنشاء الموظف وحساب الدخول</h3><div class=card dir=ltr style="text-align:left">Username: <b>${E(un)}</b><br>Password: <b>${E(pw)}</b></div><p class=mu>سجّل البيانات الآن، كلمة المرور لا تُحفظ.</p>${B('close','','إغلاق','o')}`},
+ async saveP(){const r=val('pr'),p=[...document.querySelectorAll('#pc input:checked')].map(c=>c.value);
+  run(setDoc(doc(db,'settings','role_permissions'),{...DEF,...PERM,[r]:p}),'تم حفظ الصلاحيات')},
+ saveU(){const uid=val('uu');if(!uid||!val('un'))return toast('أدخل UID والاسم',0);run(setDoc(doc(db,'users',uid),{name:val('un'),role:val('ur')}),'تم ربط الحساب')}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.disabled){const id=b.dataset.id,it=id&&Object.values(D).flat().find(x=>x&&x.id===id);LC=it?(it.childName||it.name||it.client||''):(child?.name||val('cn')||'');A[b.dataset.a]?.(id)}});
+$('dlg').addEventListener('close',()=>{$('dlg').className=''});
+document.addEventListener('input',e=>{if(['q','aq','lq','pq','uq','sq','sq2','cq'].includes(e.target.id))SC[cur].u?.()});
+document.addEventListener('change',e=>{if(['ak','lf'].includes(e.target.id))SC[cur].u?.()});
+document.addEventListener('change',e=>{if(e.target.id==='pr'){$('pc').dataset.r='';SC.perm.u()}});
+const clk=()=>{const n=new Date();$('tm').textContent=n.toLocaleTimeString('ar-SA');$('dt2').textContent=n.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'})};setInterval(clk,1000);clk();
+$('pw').addEventListener('keydown',e=>e.key==='Enter'&&A.login());
+$('em').addEventListener('keydown',e=>e.key==='Enter'&&A.login());
+</script></body></html>
